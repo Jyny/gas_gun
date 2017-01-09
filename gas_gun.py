@@ -14,6 +14,7 @@ pygame.mouse.set_visible(False)
 
 screen = pygame.display.set_mode([640, 480])
 screen.fill(WHITE)
+pygame.draw.rect(screen, BLUE, [0, 0, 10, 10])
 
 while True:
     pygame.display.update()
