@@ -292,10 +292,10 @@ def calibration_touch():
 		x_read, y_read = raw_touch()
 		if(x_read != 0 and x_read != 4095):
 			x_min, y_min = x_read, y_read
-			x_read, y_read = raw_touch()
 			i = 1
 		elif(i == 1):
 			break
+	time.sleep(0.1)
 	i = 0
 	while(1):
 		screen.fill(WHITE)
@@ -309,6 +309,7 @@ def calibration_touch():
 			i = 1
 		elif(i == 1):
 			break
+	time.sleep(0.1)
 	i = 0
 	while(1):
 		screen.fill(WHITE)
@@ -322,6 +323,7 @@ def calibration_touch():
 			i = 1
 		elif(i == 1):
 			break
+	time.sleep(0.1)
 	i = 0
 	while(1):
 		screen.fill(WHITE)
