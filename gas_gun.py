@@ -202,6 +202,35 @@ class XPT2046(object):
 		result = ( x / xDivisor) * (( z2 / z1) - 1);
 		return result;# Copyright 2012 Matthew Lowden
 
+def screen_test(sec):
+	screen.fill(WHITE)
+	pygame.display.update()
+	time.sleep(sec)
+	screen.fill(BLACK)
+	pygame.display.update()
+	time.sleep(sec)
+	screen.fill(RED)
+	pygame.display.update()
+	time.sleep(sec)
+	screen.fill(BLUE)
+	pygame.display.update()
+	time.sleep(sec)
+	screen.fill(GREEN)
+	pygame.display.update()
+	time.sleep(sec)
+	screen.fill(GBLUE)
+	pygame.display.update()
+	time.sleep(sec)
+	screen.fill(YELLOW)
+	pygame.display.update()
+	time.sleep(sec)
+	screen.fill(PERPLE)
+	pygame.display.update()
+	time.sleep(sec)
+	screen.fill(WHITE)
+	pygame.display.update()
+	time.sleep(sec)
+
 def test_point():
 	screen.fill(WHITE)
 	pygame.draw.rect(screen, BLACK, [  8,  8, 6, 6])
@@ -243,7 +272,7 @@ PERPLE  = (255,   0, 255)
 
 					# resolution 0-479 0-271
 screen = pygame.display.set_mode([640, 480])
-screen.fill(WHITE)
+screen_test(0.2)
 x = -1
 y = -1
 
