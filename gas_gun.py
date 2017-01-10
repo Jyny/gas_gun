@@ -227,22 +227,27 @@ y = -1
 #main
 while True:
 	screen.fill(WHITE)
-	pygame.draw.rect(screen, BLACK, [  9,  9, 6, 6])
-	pygame.draw.rect(screen, BLACK, [465,  9, 6, 6])
-	pygame.draw.rect(screen, BLACK, [  9,257, 6, 6])
-	pygame.draw.rect(screen, BLACK, [465,257, 6, 6])
+	pygame.draw.rect(screen, BLACK, [  8,  8, 6, 6])
+	pygame.draw.rect(screen, BLACK, [466,  8, 6, 6])
+	pygame.draw.rect(screen, BLACK, [  8,258, 6, 6])
+	pygame.draw.rect(screen, BLACK, [466,258, 6, 6])
 	pygame.draw.rect(screen, BLACK, [237,133, 6, 6])
-	pygame.draw.rect(screen, GREEN, [ 10, 10, 4, 4])
-	pygame.draw.rect(screen, GREEN, [466, 10, 4, 4])
-	pygame.draw.rect(screen, GREEN, [ 10,258, 4, 4])
-	pygame.draw.rect(screen, GREEN, [466,258, 4, 4])
+	pygame.draw.rect(screen, GREEN, [  9,  9, 4, 4])
+	pygame.draw.rect(screen, GREEN, [467,  9, 4, 4])
+	pygame.draw.rect(screen, GREEN, [  9,259, 4, 4])
+	pygame.draw.rect(screen, GREEN, [467,259, 4, 4])
 	pygame.draw.rect(screen, GREEN, [238,134, 4, 4])
+	pygame.draw.rect(screen, BLUE, [  10,  10, 2, 2])
+	pygame.draw.rect(screen, BLUE, [468,  10, 2, 2])
+	pygame.draw.rect(screen, BLUE, [ 10,260, 2, 2])
+	pygame.draw.rect(screen, BLUE, [468,260, 2, 2])
+	pygame.draw.rect(screen, BLUE, [239,135, 2, 2])
 	pygame.draw.rect(screen, RED, [  0,  0, 2, 2])
 	pygame.draw.rect(screen, RED, [478,  0, 2, 2])
 	pygame.draw.rect(screen, RED, [  0,270, 2, 2])
 	pygame.draw.rect(screen, RED, [478,270, 2, 2])
 	pygame.draw.rect(screen, RED, [239,135, 2, 2])
-	"""
+	
 	t_x = int(xpt2046.readX())
 	t_y = int(xpt2046.readY())
 	if(t_x > x and t_x != 0):
@@ -256,7 +261,7 @@ while True:
 		x = int((int(t_x)-1)*480/1290)
 	if(t_y != 4095):
 		y = int((int(t_y)-140)*272/3950)
-	
+	"""
 	stdout.write ("\r" + "X:{:5d}".format(x) + " Y:{:5d}".format(y))
 	stdout.flush ()
 	pygame.display.update()
