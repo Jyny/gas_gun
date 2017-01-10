@@ -218,16 +218,25 @@ GBLUE  = (  0, 255, 255)
 YELLOW = (255, 255,   0)
 PERPLE  = (255,   0, 255)
 
+# resolution 0-479 0-271
 screen = pygame.display.set_mode([640, 480])
 screen.fill(WHITE)
-                                # 0-479 0-271 full resolution
-                                # 240  136 half resolution
 x = -1
 y = -1
 
 #main
 while True:
 	screen.fill(WHITE)
+	pygame.draw.rect(screen, BLACK, [  9,  9, 6, 6])
+	pygame.draw.rect(screen, BLACK, [465,  9, 6, 6])
+	pygame.draw.rect(screen, BLACK, [  9,257, 6, 6])
+	pygame.draw.rect(screen, BLACK, [465,257, 6, 6])
+	pygame.draw.rect(screen, BLACK, [237,133, 6, 6])
+	pygame.draw.rect(screen, GREEN, [ 10, 10, 4, 4])
+	pygame.draw.rect(screen, GREEN, [466, 10, 4, 4])
+	pygame.draw.rect(screen, GREEN, [ 10,258, 4, 4])
+	pygame.draw.rect(screen, GREEN, [466,258, 4, 4])
+	pygame.draw.rect(screen, GREEN, [238,134, 4, 4])
 	pygame.draw.rect(screen, RED, [  0,  0, 2, 2])
 	pygame.draw.rect(screen, RED, [478,  0, 2, 2])
 	pygame.draw.rect(screen, RED, [  0,270, 2, 2])
