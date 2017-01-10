@@ -202,30 +202,7 @@ class XPT2046(object):
 		result = ( x / xDivisor) * (( z2 / z1) - 1);
 		return result;# Copyright 2012 Matthew Lowden
 
-#init
-xpt2046 = XPT2046()
-
-os.environ["SDL_FBDEV"] = "/dev/fb0"
-pygame.init()
-pygame.mouse.set_visible(False)
-
-BLACK = (  0,   0,   0)
-WHITE = (255, 255, 255)
-RED   = (255,   0,   0)
-GREEN = (  0, 255,   0)
-BLUE  = (  0,   0, 255)
-GBLUE  = (  0, 255, 255)
-YELLOW = (255, 255,   0)
-PERPLE  = (255,   0, 255)
-
-# resolution 0-479 0-271
-screen = pygame.display.set_mode([640, 480])
-screen.fill(WHITE)
-x = -1
-y = -1
-
-#main
-while True:
+def test_point():
 	screen.fill(WHITE)
 	pygame.draw.rect(screen, BLACK, [  8,  8, 6, 6])
 	pygame.draw.rect(screen, BLACK, [466,  8, 6, 6])
@@ -247,12 +224,37 @@ while True:
 	pygame.draw.rect(screen, RED, [  0,270, 2, 2])
 	pygame.draw.rect(screen, RED, [478,270, 2, 2])
 	pygame.draw.rect(screen, RED, [239,135, 2, 2])
-	
+
+#init
+xpt2046 = XPT2046()
+
+os.environ["SDL_FBDEV"] = "/dev/fb0"
+pygame.init()
+pygame.mouse.set_visible(False)
+
+BLACK = (  0,   0,   0)
+WHITE = (255, 255, 255)
+RED   = (255,   0,   0)
+GREEN = (  0, 255,   0)
+BLUE  = (  0,   0, 255)
+GBLUE  = (  0, 255, 255)
+YELLOW = (255, 255,   0)
+PERPLE  = (255,   0, 255)
+
+					# resolution 0-479 0-271
+screen = pygame.display.set_mode([640, 480])
+screen.fill(WHITE)
+x = -1
+y = -1
+
+#main
+while True:
+	test_point()
 	t_x = int(xpt2046.readX())
 	t_y = int(xpt2046.readY())
-	if(t_x > x and t_x != 0):
+	if(t_x != 0):
 		x = t_x
-	if(t_y > y and t_y != 4095):
+	if(t_y != 4095):
 		y = t_y
 	"""
 	t_x = int(xpt2046.readX())
