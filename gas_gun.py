@@ -4,6 +4,8 @@ import pygame, sys, os
 import RPi.GPIO as GPIO
 import time
 
+global x_min, x_max, y_min, y_max
+
 class SPIManager(object):
 	
 	SPI_MOSI = 10
@@ -243,8 +245,8 @@ def test_point():
 	pygame.draw.rect(screen, GREEN, [  9,259, 4, 4])
 	pygame.draw.rect(screen, GREEN, [467,259, 4, 4])
 	pygame.draw.rect(screen, GREEN, [238,134, 4, 4])
-	pygame.draw.rect(screen, BLUE, [  10,  10, 2, 2])
-	pygame.draw.rect(screen, BLUE, [468,  10, 2, 2])
+	pygame.draw.rect(screen, BLUE, [ 10, 10, 2, 2])
+	pygame.draw.rect(screen, BLUE, [468, 10, 2, 2])
 	pygame.draw.rect(screen, BLUE, [ 10,260, 2, 2])
 	pygame.draw.rect(screen, BLUE, [468,260, 2, 2])
 	pygame.draw.rect(screen, BLUE, [239,135, 2, 2])
@@ -253,6 +255,87 @@ def test_point():
 	pygame.draw.rect(screen, RED, [  0,270, 2, 2])
 	pygame.draw.rect(screen, RED, [478,270, 2, 2])
 	pygame.draw.rect(screen, RED, [239,135, 2, 2])
+
+def raw_touch():
+	x = int(xpt2046.readX())
+	y = int(xpt2046.readY())
+	if(x != 0 and y != 4095):
+		x1 = x
+		y1 = y
+		x = int(xpt2046.readX())
+		y = int(xpt2046.readY())
+		if(x != 0 and y != 4095):
+			x2 = x
+			y2 = y
+			x = int(xpt2046.readX())
+			y = int(xpt2046.readY())
+			if(x != 0 and y != 4095):
+				x3 = x
+				y3 = y
+				return int((x1+x2+x3)/3), int((y1+y2+y3)/3)
+			else:
+				 return x,y
+		else:
+			return x, y
+	else:
+		return x, y
+
+def calibration_touch():
+	global x_min, x_max, y_min, y_max
+	i = 0
+	while(1):
+		screen.fill(WHITE)
+		pygame.draw.rect(screen, BLACK, [  8,  8, 6, 6])
+		pygame.draw.rect(screen, GREEN, [  9,  9, 4, 4])
+		pygame.draw.rect(screen, BLUE, [ 10, 10, 2, 2])
+		pygame.display.update()
+		x_read, y_read = raw_touch()
+		if(x_read != 0 and x_read != 4095):
+			x_min, y_min = x_read, y_read
+			x_read, y_read = raw_touch()
+			i = 1
+		elif(i == 1):
+			break
+	i = 0
+	while(1):
+		screen.fill(WHITE)
+		pygame.draw.rect(screen, BLACK, [466, 8, 6, 6])
+		pygame.draw.rect(screen, GREEN, [467, 9, 4, 4])
+		pygame.draw.rect(screen, BLUE, [468, 10, 2, 2])
+		pygame.display.update()
+		x_read, y_read = raw_touch()
+		if(x_read != 0 and x_read != 4095):
+			x_max, y_min = x_read, int((y_read+y_min)/2)
+			i = 1
+		elif(i == 1):
+			break
+	i = 0
+	while(1):
+		screen.fill(WHITE)
+		pygame.draw.rect(screen, BLACK, [  8,258, 6, 6])
+		pygame.draw.rect(screen, GREEN, [  9,259, 4, 4])
+		pygame.draw.rect(screen, BLUE, [ 10,260, 2, 2])
+		pygame.display.update()
+		x_read, y_read = raw_touch()
+		if(x_read != 0 and x_read != 4095):
+			x_min, y_max = int((x_read+x_min)/2), y_read
+			i = 1
+		elif(i == 1):
+			break
+	i = 0
+	while(1):
+		screen.fill(WHITE)
+		pygame.draw.rect(screen, BLACK, [466,258, 6, 6])
+		pygame.draw.rect(screen, GREEN, [467,259, 4, 4])
+		pygame.draw.rect(screen, BLUE, [468,260, 2, 2])
+		pygame.display.update()
+		x_read, y_read = raw_touch()
+		if(x_read != 0 and x_read != 4095):
+			x_max, y_max = int((x_read+x_max)/2), int((y_read+y_max)/2)
+			i = 1
+		elif(i == 1):
+			break
+	print(x_min, y_min, x_max, y_max)
 
 #init
 xpt2046 = XPT2046()
@@ -272,27 +355,15 @@ PERPLE  = (255,   0, 255)
 
 					# resolution 0-479 0-271
 screen = pygame.display.set_mode([640, 480])
-screen_test(0.2)
+screen_test(0.1)
+calibration_touch()
 x = -1
 y = -1
 
 #main
 while True:
 	test_point()
-	t_x = int(xpt2046.readX())
-	t_y = int(xpt2046.readY())
-	if(t_x != 0):
-		x = t_x
-	if(t_y != 4095):
-		y = t_y
-	"""
-	t_x = int(xpt2046.readX())
-	t_y = int(xpt2046.readY())
-	if(t_x != 0):
-		x = int((int(t_x)-1)*480/1290)
-	if(t_y != 4095):
-		y = int((int(t_y)-140)*272/3950)
-	"""
+	x, y = raw_touch()
 	stdout.write ("\r" + "X:{:5d}".format(x) + " Y:{:5d}".format(y))
 	stdout.flush ()
 	pygame.display.update()
