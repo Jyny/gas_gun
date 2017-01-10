@@ -232,7 +232,7 @@ while True:
 	pygame.draw.rect(screen, RED, [478,  0, 2, 2])
 	pygame.draw.rect(screen, RED, [  0,270, 2, 2])
 	pygame.draw.rect(screen, RED, [478,270, 2, 2])
-	pygame.draw.rect(screen, RED, [264,135, 2, 2])
+	pygame.draw.rect(screen, RED, [239,135, 2, 2])
 	"""
 	t_x = int(xpt2046.readX())
 	t_y = int(xpt2046.readY())
