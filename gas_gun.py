@@ -276,9 +276,11 @@ def read_touch():
 	global x_min, x_max, y_min, y_max
 	x_rate = 459/(x_max-x_min)
 	y_rate = 251/(y_max-y_min)
+	x_adj = (469-x_max*x_rate + 10-x_min*x_rate)/2
+	y_adj = (261-y_max*y_rate + 10-y_min*y_rate)/2
 	x_read, y_read = raw_touch()
 	if(x_read != -1 and y_read != -1):
-		return int((x_read-x_rate*10)*x_rate + 10), int((y_read-y_rate*10)*y_rate + 10)
+		return int(x_read*x_rate+x_adj), int(y_read*y_rate+y_adj)
 	else:
 		return -1, -1
 
@@ -358,13 +360,13 @@ PERPLE  = (255,   0, 255)
 screen = pygame.display.set_mode([640, 480])
 screen_test(0.1)
 calibration_touch()
-x = -1
-y = -1
 
 #main
 while True:
-	test_point()
-	x, y = raw_touch()
+	x, y = read_touch()
+	screen.fill(WHITE)
+	pygame.draw.rect(screen, BLACK, [0, y, 479,  1])
+	pygame.draw.rect(screen, BLACK, [x, 0,   1,271])
 	stdout.write ("\r" + "X:{:5d}".format(x) + " Y:{:5d}".format(y))
 	stdout.flush ()
 	pygame.display.update()
