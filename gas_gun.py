@@ -5,6 +5,10 @@ import RPi.GPIO as GPIO
 import time
 
 global x_min, x_max, y_min, y_max
+x_min = 218
+y_min = 454
+x_max = 3894
+y_max = 3795
 
 class SPIManager(object):
 	
@@ -217,7 +221,22 @@ class button:
 		self.color = color
 
 	def draw(self, screen):
-		pygame.draw.rect(screen, self.color, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
+		dark = (self.color[0]-30, self.color[1]-30, self.color[2]-30)
+		pygame.draw.rect(screen, dark, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
+		pygame.draw.rect(screen, self.color, [self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
+		
+	
+	def is_click(self, x, y):
+		if( x >= self.x1 and x <= self.x2 and y >= self.y1 and y <= self.y2):
+			return True
+		else:
+			return False
+
+	def blink(self, screen):
+		dark = (self.color[0]-50, self.color[1]-50, self.color[2]-50)
+		pygame.draw.rect(screen, YELLOW, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
+		pygame.draw.rect(screen, dark, [self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
+		
 
 def screen_test(sec):
 	screen.fill(WHITE)
@@ -356,8 +375,8 @@ def calibration_touch():
 	print(x_min, y_min, x_max, y_max)
 
 def draw_corss(x, y):
-	pygame.draw.rect(screen, BLACK, [0, y, 479,  1])
-	pygame.draw.rect(screen, BLACK, [x, 0,   1,271])
+	pygame.draw.rect(screen, WHITE, [0, y, 479,  1])
+	pygame.draw.rect(screen, WHITE, [x, 0,   1,271])
 
 #init
 xpt2046 = XPT2046()
@@ -365,6 +384,11 @@ xpt2046 = XPT2046()
 os.environ["SDL_FBDEV"] = "/dev/fb0"
 pygame.init()
 pygame.mouse.set_visible(False)
+
+					# resolution 0-479 0-271
+screen = pygame.display.set_mode([640, 480])
+screen_test(0.1)
+#calibration_touch()
 
 BLACK = (  0,   0,   0)
 WHITE = (255, 255, 255)
@@ -375,16 +399,19 @@ GBLUE  = (  0, 255, 255)
 YELLOW = (255, 255,   0)
 PERPLE  = (255,   0, 255)
 
-					# resolution 0-479 0-271
-screen = pygame.display.set_mode([640, 480])
-screen_test(0.1)
-calibration_touch()
+# init buttons 
+a = button(50, 80, 50, 80, WHITE, '1')
 
 #main
 while True:
 	x, y = read_touch()
-	screen.fill(WHITE)
-	draw_corss(x, y)
+	screen.fill(BLACK)
+
+	a.draw(screen)
+	if a.is_click(x, y):
+		a.blink(screen)
+
+	#draw_corss(x, y)
 	pygame.display.update()
 	stdout.write ("\r" + ('1 ' if x != -1 and y != -1 else '0 ') + "X:{:5d}".format(x) + " Y:{:5d}".format(y))
 	stdout.flush ()
