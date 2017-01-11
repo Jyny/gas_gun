@@ -4,6 +4,15 @@ import pygame, sys, os
 import RPi.GPIO as GPIO
 import time
 
+BLACK = (  0,   0,   0)
+WHITE = (255, 255, 255)
+RED   = (255,   0,   0)
+GREEN = (  0, 255,   0)
+BLUE  = (  0,   0, 255)
+GBLUE  = (  0, 255, 255)
+YELLOW = (255, 255,   0)
+PERPLE  = (255,   0, 255)
+
 global x_min, x_max, y_min, y_max
 x_min = 218
 y_min = 454
@@ -222,7 +231,7 @@ class button:
 		pygame.draw.rect(screen, dark, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
 		pygame.draw.rect(screen, self.color, [self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
 		text = pygame.font.SysFont("", 15).render(self.text, True, BLACK)
-		screen.blit(text, (x1, y1))
+		screen.blit(text, (self.x1, self.y1))
 	
 	def is_click(self, x, y):
 		if( x >= self.x1 and x <= self.x2 and y >= self.y1 and y <= self.y2):
@@ -387,15 +396,6 @@ pygame.mouse.set_visible(False)
 screen = pygame.display.set_mode([640, 480])
 screen_test(0.1)
 #calibration_touch()
-
-BLACK = (  0,   0,   0)
-WHITE = (255, 255, 255)
-RED   = (255,   0,   0)
-GREEN = (  0, 255,   0)
-BLUE  = (  0,   0, 255)
-GBLUE  = (  0, 255, 255)
-YELLOW = (255, 255,   0)
-PERPLE  = (255,   0, 255)
 
 # init buttons 
 a = button(50, 80, 50, 80, WHITE, '1')
