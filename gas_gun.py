@@ -204,6 +204,14 @@ class XPT2046(object):
 		result = ( x / xDivisor) * (( z2 / z1) - 1);
 		return result;# Copyright 2012 Matthew Lowden
 
+class button:
+	def __init__(x1, x2, y1, y2, color):
+		self.x1 = x1
+		self.x2 = x2
+		self.y1 = y1
+		self.y2 = y2
+	
+
 def screen_test(sec):
 	screen.fill(WHITE)
 	pygame.display.update()
@@ -340,6 +348,10 @@ def calibration_touch():
 			break
 	print(x_min, y_min, x_max, y_max)
 
+def draw_corss(x, y):
+	pygame.draw.rect(screen, BLACK, [0, y, 479,  1])
+	pygame.draw.rect(screen, BLACK, [x, 0,   1,271])
+
 #init
 xpt2046 = XPT2046()
 
@@ -365,8 +377,7 @@ calibration_touch()
 while True:
 	x, y = read_touch()
 	screen.fill(WHITE)
-	pygame.draw.rect(screen, BLACK, [0, y, 479,  1])
-	pygame.draw.rect(screen, BLACK, [x, 0,   1,271])
+	draw_corss(x, y)
+	pygame.display.update()
 	stdout.write ("\r" + ('1 ' if x != -1 and y != -1 else '0 ') + "X:{:5d}".format(x) + " Y:{:5d}".format(y))
 	stdout.flush ()
-	pygame.display.update()
