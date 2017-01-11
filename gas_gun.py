@@ -227,10 +227,13 @@ class button:
 		self.text = text
 
 	def draw(self, screen):
-		dark = (self.color[0]-30, self.color[1]-30, self.color[2]-30)
+		dark = (
+			self.color[0]-30 if self.color[0] > 30 else self.color[0],
+			self.color[1]-30 if self.color[1] > 30 else self.color[1],
+			self.color[2]-30 if self.color[2] > 30 else self.color[2])
 		pygame.draw.rect(screen, dark, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
 		pygame.draw.rect(screen, self.color, [self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
-		text = pygame.font.SysFont("", 24).render(self.text, True, BLACK)
+		text = pygame.font.SysFont("", 24).render(self.text, False, BLACK)
 		text_rect = text.get_rect(center=((self.x1+self.x2)/2, (self.y1+self.y2)/2))
 		screen.blit(text, text_rect)
 	
@@ -241,10 +244,13 @@ class button:
 			return False
 
 	def blink(self, screen):
-		dark = (self.color[0]-50, self.color[1]-50, self.color[2]-50)
+		dark = (
+			self.color[0]-30 if self.color[0] > 30 else self.color[0],
+			self.color[1]-30 if self.color[1] > 30 else self.color[1],
+			self.color[2]-30 if self.color[2] > 30 else self.color[2])
 		pygame.draw.rect(screen, YELLOW, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
 		pygame.draw.rect(screen, dark, [self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
-		text = pygame.font.SysFont("", 24).render(self.text, True, BLACK)
+		text = pygame.font.SysFont("", 24).render(self.text, False, BLACK)
 		text_rect = text.get_rect(center=((self.x1+self.x2)/2, (self.y1+self.y2)/2))
 		screen.blit(text, text_rect)
 		
@@ -402,16 +408,21 @@ screen_test(0.1)
 #calibration_touch()
 
 # init buttons 
-a = button(50, 80, 50, 80, WHITE, '1')
+buttons = []
+buttons.append(button(50, 80, 50, 80, WHITE, '1'))
+buttons.append(button(100, 200, 100, 140, GREEN, 'START'))
+buttons.append(button(100, 200, 150, 190, RED, 'END'))
 
 #main
 while True:
 	x, y = read_touch()
 	screen.fill(BLACK)
-
-	a.draw(screen)
-	if a.is_click(x, y):
-		a.blink(screen)
+	
+	for butt in buttons:
+		if butt.is_click(x, y):
+			butt.blink(screen)
+		else:
+			butt.draw(screen)
 
 	#draw_corss(x, y)
 	pygame.display.update()
