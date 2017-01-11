@@ -205,12 +205,19 @@ class XPT2046(object):
 		return result;# Copyright 2012 Matthew Lowden
 
 class button:
-	def __init__(x1, x2, y1, y2, color):
+	x1 = 0
+	x2 = 0
+	y1 = 0
+	x2 = 0
+	def __init__(self, x1, x2, y1, y2, color):
 		self.x1 = x1
 		self.x2 = x2
 		self.y1 = y1
 		self.y2 = y2
-	
+		self.color = color
+
+	def draw(self, screen):
+		pygame.draw.rect(screen, self.color, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
 
 def screen_test(sec):
 	screen.fill(WHITE)
