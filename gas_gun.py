@@ -230,8 +230,9 @@ class button:
 		dark = (self.color[0]-30, self.color[1]-30, self.color[2]-30)
 		pygame.draw.rect(screen, dark, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
 		pygame.draw.rect(screen, self.color, [self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
-		text = pygame.font.SysFont("", 15).render(self.text, True, BLACK)
-		screen.blit(text, (self.x1, self.y1))
+		text = pygame.font.SysFont("", 24).render(self.text, True, BLACK)
+		text_rect = text.get_rect(center=((self.x1+self.x2)/2, (self.y1+self.y2)/2))
+		screen.blit(text, text_rect)
 	
 	def is_click(self, x, y):
 		if( x >= self.x1 and x <= self.x2 and y >= self.y1 and y <= self.y2):
@@ -243,6 +244,9 @@ class button:
 		dark = (self.color[0]-50, self.color[1]-50, self.color[2]-50)
 		pygame.draw.rect(screen, YELLOW, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
 		pygame.draw.rect(screen, dark, [self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
+		text = pygame.font.SysFont("", 24).render(self.text, True, BLACK)
+		text_rect = text.get_rect(center=((self.x1+self.x2)/2, (self.y1+self.y2)/2))
+		screen.blit(text, text_rect)
 		
 
 def screen_test(sec):
