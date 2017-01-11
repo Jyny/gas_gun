@@ -367,6 +367,6 @@ while True:
 	screen.fill(WHITE)
 	pygame.draw.rect(screen, BLACK, [0, y, 479,  1])
 	pygame.draw.rect(screen, BLACK, [x, 0,   1,271])
-	stdout.write ("\r" + "X:{:5d}".format(x) + " Y:{:5d}".format(y))
+	stdout.write ("\r" + ('1 ' if x != -1 and y != -1 else '0 ') + "X:{:5d}".format(x) + " Y:{:5d}".format(y))
 	stdout.flush ()
 	pygame.display.update()
