@@ -290,12 +290,12 @@ def calibration_touch():
 		pygame.draw.rect(screen, BLUE, [ 10, 10, 2, 2])
 		pygame.display.update()
 		x_read, y_read = raw_touch()
-		if(x_read != 0 and x_read != 4095):
+		if(x_read != 0 and y_read != 4095):
 			x_min, y_min = x_read, y_read
 			i = 1
 		elif(i == 1):
 			break
-	time.sleep(0.1)
+	time.sleep(0.2)
 	i = 0
 	while(1):
 		screen.fill(WHITE)
@@ -304,12 +304,12 @@ def calibration_touch():
 		pygame.draw.rect(screen, BLUE, [468, 10, 2, 2])
 		pygame.display.update()
 		x_read, y_read = raw_touch()
-		if(x_read != 0 and x_read != 4095):
+		if(x_read != 0 and y_read != 4095):
 			x_max, y_min = x_read, int((y_read+y_min)/2)
 			i = 1
 		elif(i == 1):
 			break
-	time.sleep(0.1)
+	time.sleep(0.2)
 	i = 0
 	while(1):
 		screen.fill(WHITE)
@@ -318,12 +318,12 @@ def calibration_touch():
 		pygame.draw.rect(screen, BLUE, [ 10,260, 2, 2])
 		pygame.display.update()
 		x_read, y_read = raw_touch()
-		if(x_read != 0 and x_read != 4095):
+		if(x_read != 0 and y_read != 4095):
 			x_min, y_max = int((x_read+x_min)/2), y_read
 			i = 1
 		elif(i == 1):
 			break
-	time.sleep(0.1)
+	time.sleep(0.2)
 	i = 0
 	while(1):
 		screen.fill(WHITE)
@@ -332,7 +332,7 @@ def calibration_touch():
 		pygame.draw.rect(screen, BLUE, [468,260, 2, 2])
 		pygame.display.update()
 		x_read, y_read = raw_touch()
-		if(x_read != 0 and x_read != 4095):
+		if(x_read != 0 and y_read != 4095):
 			x_max, y_max = int((x_read+x_max)/2), int((y_read+y_max)/2)
 			i = 1
 		elif(i == 1):
