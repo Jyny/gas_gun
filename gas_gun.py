@@ -446,6 +446,27 @@ def draw_corss(x, y):
 	pygame.draw.rect(screen, WHITE, [0, y, 479,  1])
 	pygame.draw.rect(screen, WHITE, [x, 0,   1,271])
 
+def botton_show():
+	if uni_unm_butt.is_click(x, y):
+		uni_unm_butt.blink(screen)
+	else:
+		uni_unm_butt.draw(screen)
+
+	for butt in buttons:
+		if butt.is_click(x, y):
+			butt.blink(screen)
+		else:
+			butt.draw(screen)
+
+	for key, butt in enumerate(setting_butts):
+		if butt.is_click(x, y):
+			butt.blink(screen)
+			butt.stat = 1
+			setting_butts[(key+1)%2].stat = 0
+		else:
+			butt.draw(screen)
+
+
 #init
 xpt2046 = XPT2046()
 
@@ -462,18 +483,17 @@ screen = pygame.display.set_mode([640, 480])
 
 # init buttons 
 buttons = []
-buttons.append(button(294,415,  0, 29, WHITE, b'\xe7\xb5\xb1\xe4\xb8\x80\xe7\xb7\xa8\xe8\x99\x9f'.decode()))
 buttons.append(button(418,477,  0, 29, WHITE, b'\xe2\x86\x90'.decode()))
-buttons.append(button(294,353, 32, 89, WHITE, '1'))
-buttons.append(button(356,415, 32, 89, WHITE, '2'))
-buttons.append(button(418,477, 32, 89, WHITE, '3'))
-buttons.append(button(294,353, 92,149, WHITE, '4'))
-buttons.append(button(356,415, 92,149, WHITE, '5'))
-buttons.append(button(418,477, 92,149, WHITE, '6'))
-buttons.append(button(294,353,152,209, WHITE, '7'))
-buttons.append(button(356,415,152,209, WHITE, '8'))
-buttons.append(button(418,477,152,209, WHITE, '9'))
-buttons.append(button(356,415,212,271, WHITE, '0'))
+buttons.append(button(294,353, 32, 89, PERPLE, '1'))
+buttons.append(button(356,415, 32, 89, PERPLE, '2'))
+buttons.append(button(418,477, 32, 89, PERPLE, '3'))
+buttons.append(button(294,353, 92,149, PERPLE, '4'))
+buttons.append(button(356,415, 92,149, PERPLE, '5'))
+buttons.append(button(418,477, 92,149, PERPLE, '6'))
+buttons.append(button(294,353,152,209, PERPLE, '7'))
+buttons.append(button(356,415,152,209, PERPLE, '8'))
+buttons.append(button(418,477,152,209, PERPLE, '9'))
+buttons.append(button(356,415,212,271, PERPLE, '0'))
 start_button = button(294,353,212,271, GREEN, 'START')
 end_button = button(418,477,212,271, RED, 'END')
 start_button.size = 18
@@ -481,6 +501,7 @@ end_button.size = 18
 buttons.append(start_button)
 buttons.append(end_button)
 setting_butts = []
+uni_unm_butt = setting_button(294,415,  0, 29, b'\xe7\xb5\xb1\xe4\xb8\x80\xe7\xb7\xa8\xe8\x99\x9f'.decode())
 set_mny_butt = setting_button(  2,144, 0, 39, b'\xe8\xa8\xad\xe5\xae\x9a\xe6\xb2\xb9\xe9\x87\x8f'.decode())
 set_oil_butt = setting_button(145,291, 0, 39, b'\xe8\xa8\xad\xe5\xae\x9a\xe9\x87\x91\xe9\xa1\x8d'.decode())
 set_mny_butt.stat = 0
@@ -493,21 +514,7 @@ while True:
 	x, y = read_touch()
 	screen.fill(BLACK)
 	pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
-
-	for butt in buttons:
-		if butt.is_click(x, y):
-			butt.blink(screen)
-		else:
-			butt.draw(screen)
-
-	for key, butt in enumerate(setting_butts):
-		if butt.is_click(x, y):
-			butt.blink(screen)
-			butt.stat = 1
-			setting_butts[(key+1)%2].stat = 0
-		else:
-			butt.draw(screen)
-
+	botton_show()
 	#draw_corss(x, y)
 	pygame.display.update()
 	stdout.write ("\r" + ('1 ' if x != -1 and y != -1 else '0 ') + "X:{:5d}".format(x) + " Y:{:5d}".format(y))
