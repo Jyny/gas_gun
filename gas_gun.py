@@ -466,8 +466,7 @@ def botton_show():
 		else:
 			butt.draw(screen)
 
-
-#init
+# init
 xpt2046 = XPT2046()
 
 os.environ["SDL_FBDEV"] = "/dev/fb0"
@@ -483,6 +482,13 @@ screen = pygame.display.set_mode([640, 480])
 
 # init buttons 
 buttons = []
+buttons.append(button(356,415,212,271, PERPLE, '0'))
+start_button = button(294,353,212,271, GREEN, 'START')
+end_button = button(418,477,212,271, RED, 'END')
+start_button.size = 18
+end_button.size = 18
+buttons.append(start_button)
+buttons.append(end_button)
 buttons.append(button(418,477,  0, 29, WHITE, b'\xe2\x86\x90'.decode()))
 buttons.append(button(294,353, 32, 89, PERPLE, '1'))
 buttons.append(button(356,415, 32, 89, PERPLE, '2'))
@@ -493,21 +499,16 @@ buttons.append(button(418,477, 92,149, PERPLE, '6'))
 buttons.append(button(294,353,152,209, PERPLE, '7'))
 buttons.append(button(356,415,152,209, PERPLE, '8'))
 buttons.append(button(418,477,152,209, PERPLE, '9'))
-buttons.append(button(356,415,212,271, PERPLE, '0'))
-start_button = button(294,353,212,271, GREEN, 'START')
-end_button = button(418,477,212,271, RED, 'END')
-start_button.size = 18
-end_button.size = 18
-buttons.append(start_button)
-buttons.append(end_button)
+
 setting_butts = []
-uni_unm_butt = setting_button(294,415,  0, 29, b'\xe7\xb5\xb1\xe4\xb8\x80\xe7\xb7\xa8\xe8\x99\x9f'.decode())
 set_mny_butt = setting_button(  2,144, 0, 39, b'\xe8\xa8\xad\xe5\xae\x9a\xe6\xb2\xb9\xe9\x87\x8f'.decode())
 set_oil_butt = setting_button(145,291, 0, 39, b'\xe8\xa8\xad\xe5\xae\x9a\xe9\x87\x91\xe9\xa1\x8d'.decode())
 set_mny_butt.stat = 0
 set_oil_butt.stat = 0
 setting_butts.append(set_mny_butt)
 setting_butts.append(set_oil_butt)
+
+uni_unm_butt = setting_button(294,415,  0, 29, b'\xe7\xb5\xb1\xe4\xb8\x80\xe7\xb7\xa8\xe8\x99\x9f'.decode())
 
 #main
 while True:
