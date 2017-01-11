@@ -233,7 +233,7 @@ class button:
 			self.color[2]-30 if self.color[2] > 30 else self.color[2])
 		pygame.draw.rect(screen, dark, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
 		pygame.draw.rect(screen, self.color, [self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
-		text = pygame.font.SysFont("", 24).render(self.text, False, BLACK)
+		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 24).render(self.text, False, BLACK)
 		text_rect = text.get_rect(center=((self.x1+self.x2)/2, (self.y1+self.y2)/2))
 		screen.blit(text, text_rect)
 	
@@ -250,7 +250,7 @@ class button:
 			self.color[2]-30 if self.color[2] > 30 else self.color[2])
 		pygame.draw.rect(screen, YELLOW, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
 		pygame.draw.rect(screen, dark, [self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
-		text = pygame.font.SysFont("", 24).render(self.text, False, BLACK)
+		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 24).render(self.text, False, BLACK)
 		text_rect = text.get_rect(center=((self.x1+self.x2)/2, (self.y1+self.y2)/2))
 		screen.blit(text, text_rect)
 		
@@ -412,6 +412,7 @@ buttons = []
 buttons.append(button(50, 80, 50, 80, WHITE, '1'))
 buttons.append(button(100, 200, 100, 140, GREEN, 'START'))
 buttons.append(button(100, 200, 150, 190, RED, 'END'))
+buttons.append(button(100, 200, 200, 240, RED, b'\xe7\xb5\xb1\xe4\xb8\x80\xe7\xb7\xa8\xe8\x99\x9f'.decode()))
 
 #main
 while True:
