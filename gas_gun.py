@@ -455,7 +455,9 @@ pygame.mouse.set_visible(False)
 
 					# resolution 0-479 0-271
 screen = pygame.display.set_mode([640, 480])
-screen_test(0.1)
+
+# init tests
+#screen_test(0.1)
 #calibration_touch()
 
 # init buttons 
