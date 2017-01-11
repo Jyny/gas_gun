@@ -256,6 +256,55 @@ class button:
 		text_rect = text.get_rect(center=((self.x1+self.x2)/2, (self.y1+self.y2)/2))
 		screen.blit(text, text_rect)
 		
+class setting_button:
+	def __init__(self, x1, x2, y1, y2, text):
+		self.x1 = x1
+		self.x2 = x2
+		self.y1 = y1
+		self.y2 = y2
+		self.color = BLUE
+		self.text = text
+		self.size = 20
+		self.dark = 40
+		self.stat = 0
+
+	def draw(self, screen):
+		dark = (
+			self.color[0]-self.dark if self.color[0] > self.dark else self.color[0],
+			self.color[1]-self.dark if self.color[1] > self.dark else self.color[1],
+			self.color[2]-self.dark if self.color[2] > self.dark else self.color[2])
+		pygame.draw.rect(screen,
+			(YELLOW if self.stat == 1 else dark),
+			[self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
+		pygame.draw.rect(screen,
+			(GBLUE if self.stat == 1 else BLUE),
+			[self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
+		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', self.size).render(self.text, False, BLACK)
+		text_rect = text.get_rect(center=((self.x1+self.x2)/2, (self.y1+self.y2)/2))
+		screen.blit(text, text_rect)
+	
+	def is_click(self, x, y):
+		if( x >= self.x1 and x <= self.x2 and y >= self.y1 and y <= self.y2):
+			return True
+		else:
+			return False
+
+	def blink(self, screen):
+		dark = (
+			self.color[0]-self.dark if self.color[0] > self.dark else self.color[0],
+			self.color[1]-self.dark if self.color[1] > self.dark else self.color[1],
+			self.color[2]-self.dark if self.color[2] > self.dark else self.color[2])
+		pygame.draw.rect(screen, YELLOW, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
+		pygame.draw.rect(screen, dark, [self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
+		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', self.size).render(self.text, False, BLACK)
+		text_rect = text.get_rect(center=((self.x1+self.x2)/2, (self.y1+self.y2)/2))
+		screen.blit(text, text_rect)
+	
+	def set_stat(self, stat):
+		if(stat == 1):
+			self.stat = 1
+		else:
+			self.stat = 0
 
 def screen_test(sec):
 	screen.fill(WHITE)
@@ -411,16 +460,17 @@ screen_test(0.1)
 
 # init buttons 
 buttons = []
-buttons.append(button(294,477,  0, 23, WHITE, b'\xe7\xb5\xb1\xe4\xb8\x80\xe7\xb7\xa8\xe8\x99\x9f'.decode()))
-buttons.append(button(294,353, 26, 85, WHITE, '1'))
-buttons.append(button(356,415, 26, 85, WHITE, '2'))
-buttons.append(button(418,477, 26, 85, WHITE, '3'))
-buttons.append(button(294,353, 88,147, WHITE, '4'))
-buttons.append(button(356,415, 88,147, WHITE, '5'))
-buttons.append(button(418,477, 88,147, WHITE, '6'))
-buttons.append(button(294,353,150,209, WHITE, '7'))
-buttons.append(button(356,415,150,209, WHITE, '8'))
-buttons.append(button(418,477,150,209, WHITE, '9'))
+buttons.append(button(294,415,  0, 29, WHITE, b'\xe7\xb5\xb1\xe4\xb8\x80\xe7\xb7\xa8\xe8\x99\x9f'.decode()))
+buttons.append(button(418,477,  0, 29, WHITE, b'\xe2\x86\x90'.decode()))
+buttons.append(button(294,353, 32, 89, WHITE, '1'))
+buttons.append(button(356,415, 32, 89, WHITE, '2'))
+buttons.append(button(418,477, 32, 89, WHITE, '3'))
+buttons.append(button(294,353, 92,149, WHITE, '4'))
+buttons.append(button(356,415, 92,149, WHITE, '5'))
+buttons.append(button(418,477, 92,149, WHITE, '6'))
+buttons.append(button(294,353,152,209, WHITE, '7'))
+buttons.append(button(356,415,152,209, WHITE, '8'))
+buttons.append(button(418,477,152,209, WHITE, '9'))
 buttons.append(button(356,415,212,271, WHITE, '0'))
 start_button = button(294,353,212,271, GREEN, 'START')
 end_button = button(418,477,212,271, RED, 'END')
@@ -428,17 +478,31 @@ start_button.size = 18
 end_button.size = 18
 buttons.append(start_button)
 buttons.append(end_button)
-buttons.append(button(  2,144, 0, 39, GBLUE, b'\xe8\xa8\xad\xe5\xae\x9a\xe6\xb2\xb9\xe9\x87\x8f'.decode()))
-buttons.append(button(145,291, 0, 39, BLUE, b'\xe8\xa8\xad\xe5\xae\x9a\xe9\x87\x91\xe9\xa1\x8d'.decode()))
+setting_butts = []
+set_mny_butt = setting_button(  2,144, 0, 39, b'\xe8\xa8\xad\xe5\xae\x9a\xe6\xb2\xb9\xe9\x87\x8f'.decode())
+set_oil_butt = setting_button(145,291, 0, 39, b'\xe8\xa8\xad\xe5\xae\x9a\xe9\x87\x91\xe9\xa1\x8d'.decode())
+set_mny_butt.stat = 0
+set_oil_butt.stat = 0
+setting_butts.append(set_mny_butt)
+setting_butts.append(set_oil_butt)
 
 #main
 while True:
 	x, y = read_touch()
 	screen.fill(BLACK)
 	pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
+
 	for butt in buttons:
 		if butt.is_click(x, y):
 			butt.blink(screen)
+		else:
+			butt.draw(screen)
+
+	for key, butt in enumerate(setting_butts):
+		if butt.is_click(x, y):
+			butt.blink(screen)
+			butt.stat = 1
+			setting_butts[(key+1)%2].stat = 0
 		else:
 			butt.draw(screen)
 
