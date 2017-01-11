@@ -272,6 +272,16 @@ def raw_touch():
 			j += 1
 	return (-1, -1) if i<3 else (int(x/i), int(y/i))
 
+def read_touch():
+	global x_min, x_max, y_min, y_max
+	x_rate = 459/(x_max-x_min)
+	y_rate = 251/(y_max-y_min)
+	x_read, y_read = raw_touch()
+	if(x_read != -1 and y_read != -1):
+		return int((x_read-x_rate*10)*x_rate + 10), int((y_read-y_rate*10)*y_rate + 10)
+	else:
+		return -1, -1
+
 def calibration_touch():
 	global x_min, x_max, y_min, y_max
 	i = 0
