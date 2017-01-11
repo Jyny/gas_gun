@@ -411,29 +411,31 @@ screen_test(0.1)
 
 # init buttons 
 buttons = []
-buttons.append(button(294,353, 14, 73, WHITE, '1'))
-buttons.append(button(356,415, 14, 73, WHITE, '2'))
-buttons.append(button(418,477, 14, 73, WHITE, '3'))
-buttons.append(button(294,353, 76,135, WHITE, '4'))
-buttons.append(button(356,415, 76,135, WHITE, '5'))
-buttons.append(button(418,477, 76,135, WHITE, '6'))
-buttons.append(button(294,353,138,197, WHITE, '7'))
-buttons.append(button(356,415,138,197, WHITE, '8'))
-buttons.append(button(418,477,138,197, WHITE, '9'))
-buttons.append(button(356,415,200,259, WHITE, '0'))
-start_button = button(294,353,200,259, GREEN, 'START')
-end_button = button(418,477,200,259, RED, 'END')
+buttons.append(button(294,477,  0, 23, WHITE, b'\xe7\xb5\xb1\xe4\xb8\x80\xe7\xb7\xa8\xe8\x99\x9f'.decode()))
+buttons.append(button(294,353, 26, 85, WHITE, '1'))
+buttons.append(button(356,415, 26, 85, WHITE, '2'))
+buttons.append(button(418,477, 26, 85, WHITE, '3'))
+buttons.append(button(294,353, 88,147, WHITE, '4'))
+buttons.append(button(356,415, 88,147, WHITE, '5'))
+buttons.append(button(418,477, 88,147, WHITE, '6'))
+buttons.append(button(294,353,150,209, WHITE, '7'))
+buttons.append(button(356,415,150,209, WHITE, '8'))
+buttons.append(button(418,477,150,209, WHITE, '9'))
+buttons.append(button(356,415,212,271, WHITE, '0'))
+start_button = button(294,353,212,271, GREEN, 'START')
+end_button = button(418,477,212,271, RED, 'END')
 start_button.size = 18
 end_button.size = 18
 buttons.append(start_button)
 buttons.append(end_button)
-buttons.append(button(100, 200, 200, 240, RED, b'\xe7\xb5\xb1\xe4\xb8\x80\xe7\xb7\xa8\xe8\x99\x9f'.decode()))
+buttons.append(button(  2,144, 0, 39, GBLUE, b'\xe8\xa8\xad\xe5\xae\x9a\xe6\xb2\xb9\xe9\x87\x8f'.decode()))
+buttons.append(button(145,291, 0, 39, BLUE, b'\xe8\xa8\xad\xe5\xae\x9a\xe9\x87\x91\xe9\xa1\x8d'.decode()))
 
 #main
 while True:
 	x, y = read_touch()
 	screen.fill(BLACK)
-	pygame.draw.rect(screen, WHITE, [  0,  0,291,197])
+	pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
 	for butt in buttons:
 		if butt.is_click(x, y):
 			butt.blink(screen)
