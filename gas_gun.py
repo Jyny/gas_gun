@@ -209,22 +209,20 @@ class XPT2046(object):
 		return result;# Copyright 2012 Matthew Lowden
 
 class button:
-	x1 = 0
-	x2 = 0
-	y1 = 0
-	x2 = 0
-	def __init__(self, x1, x2, y1, y2, color):
+	def __init__(self, x1, x2, y1, y2, color, text):
 		self.x1 = x1
 		self.x2 = x2
 		self.y1 = y1
 		self.y2 = y2
 		self.color = color
+		self.text = text
 
 	def draw(self, screen):
 		dark = (self.color[0]-30, self.color[1]-30, self.color[2]-30)
 		pygame.draw.rect(screen, dark, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
 		pygame.draw.rect(screen, self.color, [self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
-		
+		text = pygame.font.SysFont("", 15).render(self.text, True, BLACK)
+		screen.blit(text, (x1, y1))
 	
 	def is_click(self, x, y):
 		if( x >= self.x1 and x <= self.x2 and y >= self.y1 and y <= self.y2):
