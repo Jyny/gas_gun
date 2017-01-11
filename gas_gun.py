@@ -225,15 +225,17 @@ class button:
 		self.y2 = y2
 		self.color = color
 		self.text = text
+		self.size = 20
+		self.dark = 40
 
 	def draw(self, screen):
 		dark = (
-			self.color[0]-30 if self.color[0] > 30 else self.color[0],
-			self.color[1]-30 if self.color[1] > 30 else self.color[1],
-			self.color[2]-30 if self.color[2] > 30 else self.color[2])
+			self.color[0]-self.dark if self.color[0] > self.dark else self.color[0],
+			self.color[1]-self.dark if self.color[1] > self.dark else self.color[1],
+			self.color[2]-self.dark if self.color[2] > self.dark else self.color[2])
 		pygame.draw.rect(screen, dark, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
 		pygame.draw.rect(screen, self.color, [self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
-		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 24).render(self.text, False, BLACK)
+		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', self.size).render(self.text, False, BLACK)
 		text_rect = text.get_rect(center=((self.x1+self.x2)/2, (self.y1+self.y2)/2))
 		screen.blit(text, text_rect)
 	
@@ -245,12 +247,12 @@ class button:
 
 	def blink(self, screen):
 		dark = (
-			self.color[0]-30 if self.color[0] > 30 else self.color[0],
-			self.color[1]-30 if self.color[1] > 30 else self.color[1],
-			self.color[2]-30 if self.color[2] > 30 else self.color[2])
+			self.color[0]-self.dark if self.color[0] > self.dark else self.color[0],
+			self.color[1]-self.dark if self.color[1] > self.dark else self.color[1],
+			self.color[2]-self.dark if self.color[2] > self.dark else self.color[2])
 		pygame.draw.rect(screen, YELLOW, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
 		pygame.draw.rect(screen, dark, [self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
-		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 24).render(self.text, False, BLACK)
+		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', self.size).render(self.text, False, BLACK)
 		text_rect = text.get_rect(center=((self.x1+self.x2)/2, (self.y1+self.y2)/2))
 		screen.blit(text, text_rect)
 		
@@ -409,16 +411,29 @@ screen_test(0.1)
 
 # init buttons 
 buttons = []
-buttons.append(button(50, 80, 50, 80, WHITE, '1'))
-buttons.append(button(100, 200, 100, 140, GREEN, 'START'))
-buttons.append(button(100, 200, 150, 190, RED, 'END'))
+buttons.append(button(294,353, 14, 73, WHITE, '1'))
+buttons.append(button(356,415, 14, 73, WHITE, '2'))
+buttons.append(button(418,477, 14, 73, WHITE, '3'))
+buttons.append(button(294,353, 76,135, WHITE, '4'))
+buttons.append(button(356,415, 76,135, WHITE, '5'))
+buttons.append(button(418,477, 76,135, WHITE, '6'))
+buttons.append(button(294,353,138,197, WHITE, '7'))
+buttons.append(button(356,415,138,197, WHITE, '8'))
+buttons.append(button(418,477,138,197, WHITE, '9'))
+buttons.append(button(356,415,200,259, WHITE, '0'))
+start_button = button(294,353,200,259, GREEN, 'START')
+end_button = button(418,477,200,259, RED, 'END')
+start_button.size = 18
+end_button.size = 18
+buttons.append(start_button)
+buttons.append(end_button)
 buttons.append(button(100, 200, 200, 240, RED, b'\xe7\xb5\xb1\xe4\xb8\x80\xe7\xb7\xa8\xe8\x99\x9f'.decode()))
 
 #main
 while True:
 	x, y = read_touch()
 	screen.fill(BLACK)
-	
+	pygame.draw.rect(screen, WHITE, [  0,  0,291,197])
 	for butt in buttons:
 		if butt.is_click(x, y):
 			butt.blink(screen)
