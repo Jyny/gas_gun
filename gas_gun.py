@@ -452,7 +452,7 @@ def draw_corss(x, y):
 def button_show():
 	if uni_unm_butt.is_click(x, y):
 		uni_unm_butt.blink(screen)
-		butt_press_handler(uni_unm_butt)
+		butt_press_handler(uni_unm_butt.id)
 	else:
 		uni_unm_butt.draw(screen)
 		butt_click_handler(uni_unm_butt.id)
@@ -487,7 +487,14 @@ def butt_click_handler(butt_id):
 		butt_click_event.append(butt_id)
 
 def butt_event_handler():
-	pass
+	global show_str
+	while(len(butt_click_event)>0):
+		butt = butt_click_event.popleft()
+		show_str += str(butt) + ' '
+	text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 16).render(show_str, False, BLACK)
+	text_rect = text.get_rect(center=(145, 250))
+	screen.blit(text, text_rect)
+		
 
 # init
 xpt2046 = XPT2046()
@@ -537,6 +544,9 @@ uni_unm_butt = setting_button(13, 294,415,  0, 29, b'\xe7\xb5\xb1\xe4\xb8\x80\xe
 butt_press_event = deque()
 butt_click_event = deque()
 
+global show_str
+show_str = ''
+
 #main
 while True:
 	x, y = read_touch()
@@ -546,6 +556,5 @@ while True:
 	#draw_corss(x, y)
 	pygame.display.update()
 	pygame.display.flip()
-	print(butt_press_event, butt_click_event)
 	#stdout.write ("\r" + ('1 ' if x != -1 and y != -1 else '0 ') + "X:{:5d}".format(x) + " Y:{:5d}".format(y))
 	##stdout.flush ()
