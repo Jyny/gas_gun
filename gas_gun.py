@@ -28,6 +28,7 @@ y = -1
 # exec_stat variables
 global money_input, money_expect_cost, money_cost, exec_stat
 global gas_expect_out, gas_out, gas_class, gas_info, mode, uni_unm
+uni_unm = ''
 mode = 0
 gas_class = ''
 gas_info = {'92':35.62, '95':37.15, '98':39.19}
