@@ -21,9 +21,13 @@ y_min = 454
 x_max = 3894
 y_max = 3795
 
+global x, y
+x = -1
+y = -1
+
 # exec_stat variables
-global money_input money_expect_cost money_cost exec_stat
-global gas_expect_out gas_out gas_class gas_info
+global money_input, money_expect_cost, money_cost, exec_stat
+global gas_expect_out, gas_out, gas_class, gas_info
 gas_class = ''
 gas_info = {'92':35.62, '95':37.15, '98':39.19}
 money_expect_cost = 0
@@ -463,6 +467,16 @@ def draw_corss(x, y):
 	pygame.draw.rect(screen, WHITE, [x, 0,   1,271])
 
 def button_show():
+	global exec_stat
+	global x, y
+
+	if exec_stat == 0:
+		x, y = read_touch()
+		if x == -1 and y == -1:
+			return
+		else:
+			exec_stat += 1
+
 	if uni_unm_butt.is_click(x, y):
 		uni_unm_butt.blink(screen)
 		butt_press_handler(uni_unm_butt.id)
@@ -499,20 +513,57 @@ def butt_click_handler(butt_id):
 		butt_press_event.remove(butt_id)
 		butt_click_event.append(butt_id)
 
+def clear():
+	global money_input, money_expect_cost, money_cost, exec_stat
+	global gas_expect_out, gas_out, gas_class, gas_info
+	gas_class = ''
+	money_expect_cost = 0
+	gas_expect_out = 0
+	money_cost = 0
+	gas_out = 0
+	money_input = 0
+	exec_stat = 0
+
 def butt_event_handler():
-	global show_str
+	global exec_stat
 	while(len(butt_click_event)>0):
 		butt = butt_click_event.popleft()
 		if butt == 10:
-			show_str = show_str[:-1]
-		else:
-			show_str += str(butt)
+			pass
+		if butt == 11:
+			if exec_stat < 5:
+				exec_stat += 1
+		if butt == 12:
+			if exec_stat >= 5:
+				clear()
+			elif exec_stat > 1:
+				exec_stat -= 1
 
 def UI_show():
-	text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(show_str, False, BLACK)
-	text_rect = text.get_rect(center=(145, 114))
-	screen.blit(text, text_rect)
-		
+	global money_input, money_expect_cost, money_cost, exec_stat
+	global gas_expect_out, gas_out, gas_class, gas_info
+	if exec_stat == 0:
+		pass
+	if exec_stat == 1:
+		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(str(exec_stat), False, BLACK)
+		text_rect = text.get_rect(center=(145, 114))
+		screen.blit(text, text_rect)
+	if exec_stat == 2:
+		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(str(exec_stat), False, BLACK)
+		text_rect = text.get_rect(center=(145, 114))
+		screen.blit(text, text_rect)
+	if exec_stat == 3:
+		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(str(exec_stat), False, BLACK)
+		text_rect = text.get_rect(center=(145, 114))
+		screen.blit(text, text_rect)
+	if exec_stat == 4:
+		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(str(exec_stat), False, BLACK)
+		text_rect = text.get_rect(center=(145, 114))
+		screen.blit(text, text_rect)
+	if exec_stat == 5:
+		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(str(exec_stat), False, BLACK)
+		text_rect = text.get_rect(center=(145, 114))
+		screen.blit(text, text_rect)
 
 # init
 xpt2046 = XPT2046()
