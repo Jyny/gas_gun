@@ -27,7 +27,8 @@ y = -1
 
 # exec_stat variables
 global money_input, money_expect_cost, money_cost, exec_stat
-global gas_expect_out, gas_out, gas_class, gas_info
+global gas_expect_out, gas_out, gas_class, gas_info, mode, uni_unm
+mode = 0
 gas_class = ''
 gas_info = {'92':35.62, '95':37.15, '98':39.19}
 money_expect_cost = 0
@@ -477,13 +478,6 @@ def button_show():
 		else:
 			exec_stat += 1
 
-	if uni_unm_butt.is_click(x, y):
-		uni_unm_butt.blink(screen)
-		butt_press_handler(uni_unm_butt.id)
-	else:
-		uni_unm_butt.draw(screen)
-		butt_click_handler(uni_unm_butt.id)
-
 	for butt in buttons:
 		if butt.is_click(x, y):
 			butt.blink(screen)
@@ -492,11 +486,9 @@ def button_show():
 			butt.draw(screen)
 			butt_click_handler(butt.id)
 
-	for key, butt in enumerate(setting_butts):
+	for butt in setting_butts:
 		if butt.is_click(x, y):
 			butt.blink(screen)
-			butt.stat = 1
-			setting_butts[(key+1)%2].stat = 0
 			butt_press_handler(butt.id)
 		else:
 			butt.draw(screen)
@@ -515,7 +507,7 @@ def butt_click_handler(butt_id):
 
 def clear():
 	global money_input, money_expect_cost, money_cost, exec_stat
-	global gas_expect_out, gas_out, gas_class, gas_info
+	global gas_expect_out, gas_out, gas_class, gas_info, mode, uni_unm
 	gas_class = ''
 	money_expect_cost = 0
 	gas_expect_out = 0
@@ -541,7 +533,7 @@ def butt_event_handler():
 
 def UI_show():
 	global money_input, money_expect_cost, money_cost, exec_stat
-	global gas_expect_out, gas_out, gas_class, gas_info
+	global gas_expect_out, gas_out, gas_class, gas_info, mode, uni_unm
 	if exec_stat == 0:
 		pass
 	if exec_stat == 1:
@@ -600,14 +592,9 @@ buttons.append(button(8, 356,415,152,209, PERPLE, '8'))
 buttons.append(button(9, 418,477,152,209, PERPLE, '9'))
 
 setting_butts = []
-set_mny_butt = setting_button(14,   2,144, 0, 39, b'\xe8\xa8\xad\xe5\xae\x9a\xe6\xb2\xb9\xe9\x87\x8f'.decode())
-set_oil_butt = setting_button(15, 145,291, 0, 39, b'\xe8\xa8\xad\xe5\xae\x9a\xe9\x87\x91\xe9\xa1\x8d'.decode())
-set_mny_butt.stat = 0
-set_oil_butt.stat = 0
-setting_butts.append(set_mny_butt)
-setting_butts.append(set_oil_butt)
-
-uni_unm_butt = setting_button(13, 294,415,  0, 29, b'\xe7\xb5\xb1\xe4\xb8\x80\xe7\xb7\xa8\xe8\x99\x9f'.decode())
+setting_butts.append(setting_button(14,   2,144, 0, 39, b'\xe8\xa8\xad\xe5\xae\x9a\xe6\xb2\xb9\xe9\x87\x8f'.decode()))
+setting_butts.append(setting_button(15, 145,291, 0, 39, b'\xe8\xa8\xad\xe5\xae\x9a\xe9\x87\x91\xe9\xa1\x8d'.decode()))
+setting_butts.append(setting_button(13, 294,415,  0, 29, b'\xe7\xb5\xb1\xe4\xb8\x80\xe7\xb7\xa8\xe8\x99\x9f'.decode()))
 
 # event queue
 butt_press_event = deque()
