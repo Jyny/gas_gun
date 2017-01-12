@@ -490,9 +490,14 @@ def butt_event_handler():
 	global show_str
 	while(len(butt_click_event)>0):
 		butt = butt_click_event.popleft()
-		show_str += str(butt) + ' '
-	text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 16).render(show_str, False, BLACK)
-	text_rect = text.get_rect(center=(145, 250))
+		if butt == 10:
+			show_str = show_str[:-1]
+		else:
+			show_str += str(butt)
+
+def UI_show():
+	text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(show_str, False, BLACK)
+	text_rect = text.get_rect(center=(145, 114))
 	screen.blit(text, text_rect)
 		
 
@@ -553,6 +558,7 @@ while True:
 	screen.fill(BLACK)
 	button_show()
 	butt_event_handler()
+	UI_show()
 	#draw_corss(x, y)
 	pygame.display.update()
 	pygame.display.flip()
