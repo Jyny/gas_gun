@@ -14,11 +14,24 @@ GBLUE  = (  0, 255, 255)
 YELLOW = (255, 255,   0)
 PERPLE  = (255,   0, 255)
 
+# screen settings
 global x_min, x_max, y_min, y_max
 x_min = 218
 y_min = 454
 x_max = 3894
 y_max = 3795
+
+# exec_stat variables
+global money_input money_expect_cost money_cost exec_stat
+global gas_expect_out gas_out gas_class gas_info
+gas_class = ''
+gas_info = {'92':35.62, '95':37.15, '98':39.19}
+money_expect_cost = 0
+gas_expect_out = 0
+money_cost = 0
+gas_out = 0
+money_input = 0
+exec_stat = 0
 
 class SPIManager(object):
 	
@@ -548,9 +561,6 @@ uni_unm_butt = setting_button(13, 294,415,  0, 29, b'\xe7\xb5\xb1\xe4\xb8\x80\xe
 # event queue
 butt_press_event = deque()
 butt_click_event = deque()
-
-global show_str
-show_str = ''
 
 #main
 while True:
