@@ -1,3 +1,4 @@
+from collections import deque
 from pygame.locals import *
 from sys import stdout
 import pygame, sys, os
@@ -218,7 +219,8 @@ class XPT2046(object):
 		return result;# Copyright 2012 Matthew Lowden
 
 class button:
-	def __init__(self, x1, x2, y1, y2, color, text):
+	def __init__(self, butt_id, x1, x2, y1, y2, color, text):
+		self.id = butt_id
 		self.x1 = x1
 		self.x2 = x2
 		self.y1 = y1
@@ -257,7 +259,8 @@ class button:
 		screen.blit(text, text_rect)
 		
 class setting_button:
-	def __init__(self, x1, x2, y1, y2, text):
+	def __init__(self, butt_id, x1, x2, y1, y2, text):
+		self.id = butt_id
 		self.x1 = x1
 		self.x2 = x2
 		self.y1 = y1
@@ -446,25 +449,45 @@ def draw_corss(x, y):
 	pygame.draw.rect(screen, WHITE, [0, y, 479,  1])
 	pygame.draw.rect(screen, WHITE, [x, 0,   1,271])
 
-def botton_show():
+def button_show():
 	if uni_unm_butt.is_click(x, y):
 		uni_unm_butt.blink(screen)
+		butt_press_handler(uni_unm_butt)
 	else:
 		uni_unm_butt.draw(screen)
+		butt_click_handler(uni_unm_butt.id)
 
 	for butt in buttons:
 		if butt.is_click(x, y):
 			butt.blink(screen)
+			butt_press_handler(butt.id)
 		else:
 			butt.draw(screen)
+			butt_click_handler(butt.id)
 
 	for key, butt in enumerate(setting_butts):
 		if butt.is_click(x, y):
 			butt.blink(screen)
 			butt.stat = 1
 			setting_butts[(key+1)%2].stat = 0
+			butt_press_handler(butt.id)
 		else:
 			butt.draw(screen)
+			butt_click_handler(butt.id)
+
+	pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
+
+def butt_press_handler(butt_id):
+	if(butt_id not in butt_press_event):
+		butt_press_event.append(butt_id)
+
+def butt_click_handler(butt_id):
+	if(butt_id in butt_press_event):
+		butt_press_event.remove(butt_id)
+		butt_click_event.append(butt_id)
+
+def butt_event_handler():
+	pass
 
 # init
 xpt2046 = XPT2046()
@@ -482,42 +505,47 @@ screen = pygame.display.set_mode([640, 480])
 
 # init buttons 
 buttons = []
-buttons.append(button(356,415,212,271, PERPLE, '0'))
-start_button = button(294,353,212,271, GREEN, 'START')
-end_button = button(418,477,212,271, RED, 'END')
+buttons.append(button(0, 356,415,212,271, PERPLE, '0'))
+start_button = button(11, 294,353,212,271, GREEN, 'START')
+end_button = button(12, 418,477,212,271, RED, 'END')
 start_button.size = 18
 end_button.size = 18
 buttons.append(start_button)
 buttons.append(end_button)
-buttons.append(button(418,477,  0, 29, WHITE, b'\xe2\x86\x90'.decode()))
-buttons.append(button(294,353, 32, 89, PERPLE, '1'))
-buttons.append(button(356,415, 32, 89, PERPLE, '2'))
-buttons.append(button(418,477, 32, 89, PERPLE, '3'))
-buttons.append(button(294,353, 92,149, PERPLE, '4'))
-buttons.append(button(356,415, 92,149, PERPLE, '5'))
-buttons.append(button(418,477, 92,149, PERPLE, '6'))
-buttons.append(button(294,353,152,209, PERPLE, '7'))
-buttons.append(button(356,415,152,209, PERPLE, '8'))
-buttons.append(button(418,477,152,209, PERPLE, '9'))
+buttons.append(button(10, 418,477,  0, 29, WHITE, b'\xe2\x86\x90'.decode()))
+buttons.append(button(1, 294,353, 32, 89, PERPLE, '1'))
+buttons.append(button(2, 356,415, 32, 89, PERPLE, '2'))
+buttons.append(button(3, 418,477, 32, 89, PERPLE, '3'))
+buttons.append(button(4, 294,353, 92,149, PERPLE, '4'))
+buttons.append(button(5, 356,415, 92,149, PERPLE, '5'))
+buttons.append(button(6, 418,477, 92,149, PERPLE, '6'))
+buttons.append(button(7, 294,353,152,209, PERPLE, '7'))
+buttons.append(button(8, 356,415,152,209, PERPLE, '8'))
+buttons.append(button(9, 418,477,152,209, PERPLE, '9'))
 
 setting_butts = []
-set_mny_butt = setting_button(  2,144, 0, 39, b'\xe8\xa8\xad\xe5\xae\x9a\xe6\xb2\xb9\xe9\x87\x8f'.decode())
-set_oil_butt = setting_button(145,291, 0, 39, b'\xe8\xa8\xad\xe5\xae\x9a\xe9\x87\x91\xe9\xa1\x8d'.decode())
+set_mny_butt = setting_button(14,   2,144, 0, 39, b'\xe8\xa8\xad\xe5\xae\x9a\xe6\xb2\xb9\xe9\x87\x8f'.decode())
+set_oil_butt = setting_button(15, 145,291, 0, 39, b'\xe8\xa8\xad\xe5\xae\x9a\xe9\x87\x91\xe9\xa1\x8d'.decode())
 set_mny_butt.stat = 0
 set_oil_butt.stat = 0
 setting_butts.append(set_mny_butt)
 setting_butts.append(set_oil_butt)
 
-uni_unm_butt = setting_button(294,415,  0, 29, b'\xe7\xb5\xb1\xe4\xb8\x80\xe7\xb7\xa8\xe8\x99\x9f'.decode())
+uni_unm_butt = setting_button(13, 294,415,  0, 29, b'\xe7\xb5\xb1\xe4\xb8\x80\xe7\xb7\xa8\xe8\x99\x9f'.decode())
+
+# event queue
+butt_press_event = deque()
+butt_click_event = deque()
 
 #main
 while True:
 	x, y = read_touch()
 	screen.fill(BLACK)
-	pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
-	botton_show()
+	button_show()
+	butt_event_handler()
 	#draw_corss(x, y)
 	pygame.display.update()
 	pygame.display.flip()
+	print(butt_press_event, butt_click_event)
 	#stdout.write ("\r" + ('1 ' if x != -1 and y != -1 else '0 ') + "X:{:5d}".format(x) + " Y:{:5d}".format(y))
-	#stdout.flush ()
+	##stdout.flush ()
