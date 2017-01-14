@@ -495,8 +495,6 @@ def button_show():
 			butt.draw(screen)
 			butt_click_handler(butt.id)
 
-	pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
-
 def butt_press_handler(butt_id):
 	if(butt_id not in butt_press_event):
 		butt_press_event.append(butt_id)
@@ -535,27 +533,34 @@ def butt_event_handler():
 def UI_show():
 	global money_input, money_expect_cost, money_cost, exec_stat
 	global gas_expect_out, gas_out, gas_class, gas_info, mode, uni_unm
+
 	if exec_stat == 0:
+		pygame.draw.rect(screen, WHITE, [  0, 0,480,272])
 		img = pygame.image.load('./gas_station.jpg')
 		img_rect = img.get_rect(center=(240, 136))
 		screen.blit(img, img_rect)
 	if exec_stat == 1:
+		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
 		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(str(exec_stat), False, BLACK)
 		text_rect = text.get_rect(center=(145, 114))
 		screen.blit(text, text_rect)
 	if exec_stat == 2:
+		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
 		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(str(exec_stat), False, BLACK)
 		text_rect = text.get_rect(center=(145, 114))
 		screen.blit(text, text_rect)
 	if exec_stat == 3:
+		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
 		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(str(exec_stat), False, BLACK)
 		text_rect = text.get_rect(center=(145, 114))
 		screen.blit(text, text_rect)
 	if exec_stat == 4:
+		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
 		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(str(exec_stat), False, BLACK)
 		text_rect = text.get_rect(center=(145, 114))
 		screen.blit(text, text_rect)
 	if exec_stat == 5:
+		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
 		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(str(exec_stat), False, BLACK)
 		text_rect = text.get_rect(center=(145, 114))
 		screen.blit(text, text_rect)
@@ -607,9 +612,9 @@ butt_click_event = deque()
 while True:
 	x, y = read_touch()
 	screen.fill(BLACK)
+	UI_show()
 	button_show()
 	butt_event_handler()
-	UI_show()
 	#draw_corss(x, y)
 	pygame.display.update()
 	pygame.display.flip()
