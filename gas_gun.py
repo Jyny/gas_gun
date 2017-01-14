@@ -551,10 +551,14 @@ def butt_event_handler():
 			pass
 		if butt == 14:
 			mode = 1
+			gas_expect_out = 0
+			money_expect_cost = 0
 			setting_butts[1].set_stat(1)
 			setting_butts[2].set_stat(0)
 		if butt == 15:
 			mode = 2
+			gas_expect_out = 0
+			money_expect_cost = 0
 			setting_butts[1].set_stat(0)
 			setting_butts[2].set_stat(1)
 
@@ -569,14 +573,26 @@ def UI_show():
 		screen.blit(img, img_rect)
 	if exec_stat == 1:
 		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
-		line1 = pygame.font.Font(font_type, 60).render(str(money_expect_cost), False, BLACK)
-		line1_mark = pygame.font.Font(font_type, 30).render(b'\xe5\x85\x83'.decode(), False, BLACK)
-		line2 = pygame.font.Font(font_type, 60).render(str(gas_expect_out), False, BLACK)
-		line2_mark = pygame.font.Font(font_type, 30).render(b'\xe5\x8d\x87'.decode(), False, BLACK)
-		screen.blit(line1, (10,92))
-		screen.blit(line1_mark, (255,120))
-		screen.blit(line2, (10,192))
-		screen.blit(line2_mark, (255,220))
+		prompt_str_1 = b'\xe8\xab\x8b\xe9\x81\xb8\xe6\x93\x87\xe6\xa8\xa1\xe5\xbc\x8f'.decode()
+		prompt_str_2 = b'\xe4\xb8\xa6\xe8\xbc\xb8\xe5\x85\xa5\xe9\x87\x91\xe9\xa1\x8d\xe6\x88\x96\xe6\xb2\xb9\xe9\x87\x8f'.decode()
+		show_str = ''
+		show_mark = ''
+		if mode == 1:
+			show_str = str(gas_expect_out)
+			show_mark = b'\xe5\x85\x83'.decode()
+		if mode == 2:
+			show_str = str(money_expect_cost)
+			show_mark = b'\xe5\x8d\x87'.decode()
+		prompt_1 = pygame.font.Font(font_type, 24).render(prompt_str_1, True, BLACK)
+		prompt_rect_1 = prompt_1.get_rect(center=(145, 70))
+		prompt_2 = pygame.font.Font(font_type, 24).render(prompt_str_2, True, BLACK)
+		prompt_rect_2 = prompt_2.get_rect(center=(145, 100))
+		line = pygame.font.Font(font_type, 60).render(show_str, False, BLACK)
+		mark = pygame.font.Font(font_type, 30).render(show_mark, False, BLACK)
+		screen.blit(prompt_1, prompt_rect_1)
+		screen.blit(prompt_2, prompt_rect_2)
+		screen.blit(line, (10,152))
+		screen.blit(mark, (255,180))
 	if exec_stat == 2:
 		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
 		text = pygame.font.Font(font_type, 30).render(str(exec_stat), False, BLACK)
