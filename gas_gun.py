@@ -551,8 +551,12 @@ def butt_event_handler():
 			pass
 		if butt == 14:
 			mode = 1
+			setting_butts[1].set_stat(1)
+			setting_butts[2].set_stat(0)
 		if butt == 15:
 			mode = 2
+			setting_butts[1].set_stat(0)
+			setting_butts[2].set_stat(1)
 
 def UI_show():
 	global money_input, money_expect_cost, money_cost, exec_stat
@@ -629,9 +633,9 @@ buttons.append(button(8, 356,415,152,209, PERPLE, '8'))
 buttons.append(button(9, 418,477,152,209, PERPLE, '9'))
 
 setting_butts = []
+setting_butts.append(setting_button(13, 294,415,  0, 29, b'\xe7\xb5\xb1\xe4\xb8\x80\xe7\xb7\xa8\xe8\x99\x9f'.decode()))
 setting_butts.append(setting_button(14,   2,144, 0, 39, b'\xe8\xa8\xad\xe5\xae\x9a\xe6\xb2\xb9\xe9\x87\x8f'.decode()))
 setting_butts.append(setting_button(15, 145,291, 0, 39, b'\xe8\xa8\xad\xe5\xae\x9a\xe9\x87\x91\xe9\xa1\x8d'.decode()))
-setting_butts.append(setting_button(13, 294,415,  0, 29, b'\xe7\xb5\xb1\xe4\xb8\x80\xe7\xb7\xa8\xe8\x99\x9f'.decode()))
 
 # event queue
 butt_press_event = deque()
