@@ -536,7 +536,9 @@ def UI_show():
 	global money_input, money_expect_cost, money_cost, exec_stat
 	global gas_expect_out, gas_out, gas_class, gas_info, mode, uni_unm
 	if exec_stat == 0:
-		pass
+		img = pygame.image.load('./gas_station.jpg')
+		img_rect = img.get_rect(center=(240, 136))
+		screen.blit(img, img_rect)
 	if exec_stat == 1:
 		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(str(exec_stat), False, BLACK)
 		text_rect = text.get_rect(center=(145, 114))
