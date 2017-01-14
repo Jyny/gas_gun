@@ -531,6 +531,13 @@ def cal_key_pad(num):
 				money_expect_cost = money_expect_cost*10+num
 			if num == 10:
 				money_expect_cost = money_expect_cost//10
+	if exec_stat == 2:
+		if num == 2:
+			gas_class = '92'
+		if num == 5:
+			gas_class = '95'
+		if num == 8:
+			gas_class = '98'
 
 def butt_event_handler():
 	global money_input, money_expect_cost, money_cost, exec_stat
@@ -549,13 +556,13 @@ def butt_event_handler():
 				exec_stat -= 1
 		if butt == 13:
 			pass
-		if butt == 14:
+		if butt == 14 and exec_stat == 1:
 			mode = 1
 			gas_expect_out = 0
 			money_expect_cost = 0
 			setting_butts[1].set_stat(1)
 			setting_butts[2].set_stat(0)
-		if butt == 15:
+		if butt == 15 and exec_stat == 1:
 			mode = 2
 			gas_expect_out = 0
 			money_expect_cost = 0
@@ -571,6 +578,7 @@ def UI_show():
 		img = pygame.image.load('./gas_station.jpg')
 		img_rect = img.get_rect(center=(240, 136))
 		screen.blit(img, img_rect)
+
 	if exec_stat == 1:
 		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
 		prompt_str_1 = b'\xe8\xab\x8b\xe9\x81\xb8\xe6\x93\x87\xe6\xa8\xa1\xe5\xbc\x8f'.decode()
@@ -593,11 +601,32 @@ def UI_show():
 		screen.blit(prompt_2, prompt_rect_2)
 		screen.blit(line, (10,152))
 		screen.blit(mark, (255,180))
+
 	if exec_stat == 2:
 		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
-		text = pygame.font.Font(font_type, 30).render(str(exec_stat), False, BLACK)
-		text_rect = text.get_rect(center=(145, 114))
-		screen.blit(text, text_rect)
+		prompt_str_1 = b'\xe8\xab\x8b\xe9\x81\xb8\xe6\x93\x87\xe7\x94\xb1\xe7\xa8\xae'.decode()
+		prompt_str_2 = b'92:\xe8\xab\x8b\xe6\x8c\x892'.decode()
+		prompt_str_3 = b'95:\xe8\xab\x8b\xe6\x8c\x895'.decode()
+		prompt_str_4 = b'98:\xe8\xab\x8b\xe6\x8c\x898'.decode()
+		prompt_1 = pygame.font.Font(font_type, 24).render(prompt_str_1, True, BLACK)
+		prompt_2 = pygame.font.Font(font_type, 24).render(prompt_str_2, True, BLACK)
+		prompt_3 = pygame.font.Font(font_type, 24).render(prompt_str_3, True, BLACK)
+		prompt_4 = pygame.font.Font(font_type, 24).render(prompt_str_4, True, BLACK)
+		line_1 = pygame.font.Font(font_type, 65).render(gas_class, False, YELLOW)
+		line_2 = pygame.font.Font(font_type, 60).render(gas_class, False, BLUE)
+		prompt_rect_1 = prompt_1.get_rect(center=(145, 70))
+		prompt_rect_2 = prompt_2.get_rect(center=(145, 100))
+		prompt_rect_3 = prompt_3.get_rect(center=(145, 130))
+		prompt_rect_4 = prompt_4.get_rect(center=(145, 160))
+		line_rect_1 = line_1.get_rect(center=(145, 220))
+		line_rect_2 = line_2.get_rect(center=(145, 220))
+		screen.blit(prompt_1, prompt_rect_1)
+		screen.blit(prompt_2, prompt_rect_2)
+		screen.blit(prompt_3, prompt_rect_3)
+		screen.blit(prompt_4, prompt_rect_4)
+		screen.blit(line_1, line_rect_1)
+		screen.blit(line_2, line_rect_2)
+
 	if exec_stat == 3:
 		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
 		text = pygame.font.Font(font_type, 30).render(str(exec_stat), False, BLACK)
