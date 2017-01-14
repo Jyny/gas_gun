@@ -5,6 +5,8 @@ import pygame, sys, os
 import RPi.GPIO as GPIO
 import time
 
+font_type = '/usr/share/fonts/truetype/wqy/wqy-microhei.ttc'
+
 BLACK = (  0,   0,   0)
 WHITE = (255, 255, 255)
 RED   = (255,   0,   0)
@@ -256,7 +258,7 @@ class button:
 			self.color[2]-self.dark if self.color[2] > self.dark else self.color[2])
 		pygame.draw.rect(screen, dark, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
 		pygame.draw.rect(screen, self.color, [self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
-		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', self.size).render(self.text, False, BLACK)
+		text = pygame.font.Font(font_type, self.size).render(self.text, False, BLACK)
 		text_rect = text.get_rect(center=((self.x1+self.x2)/2, (self.y1+self.y2)/2))
 		screen.blit(text, text_rect)
 	
@@ -273,7 +275,7 @@ class button:
 			self.color[2]-self.dark if self.color[2] > self.dark else self.color[2])
 		pygame.draw.rect(screen, YELLOW, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
 		pygame.draw.rect(screen, dark, [self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
-		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', self.size).render(self.text, False, BLACK)
+		text = pygame.font.Font(font_type, self.size).render(self.text, False, BLACK)
 		text_rect = text.get_rect(center=((self.x1+self.x2)/2, (self.y1+self.y2)/2))
 		screen.blit(text, text_rect)
 		
@@ -301,7 +303,7 @@ class setting_button:
 		pygame.draw.rect(screen,
 			(GBLUE if self.stat == 1 else BLUE),
 			[self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
-		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', self.size).render(self.text, False, BLACK)
+		text = pygame.font.Font(font_type, self.size).render(self.text, False, BLACK)
 		text_rect = text.get_rect(center=((self.x1+self.x2)/2, (self.y1+self.y2)/2))
 		screen.blit(text, text_rect)
 	
@@ -318,7 +320,7 @@ class setting_button:
 			self.color[2]-self.dark if self.color[2] > self.dark else self.color[2])
 		pygame.draw.rect(screen, YELLOW, [self.x1, self.y1, self.x2-self.x1, self.y2-self.y1])
 		pygame.draw.rect(screen, dark, [self.x1+2, self.y1+2, self.x2-self.x1-4, self.y2-self.y1-4])
-		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', self.size).render(self.text, False, BLACK)
+		text = pygame.font.Font(font_type, self.size).render(self.text, False, BLACK)
 		text_rect = text.get_rect(center=((self.x1+self.x2)/2, (self.y1+self.y2)/2))
 		screen.blit(text, text_rect)
 	
@@ -465,8 +467,8 @@ def calibration_touch():
 	print(x_min, y_min, x_max, y_max)
 
 def draw_corss(x, y):
-	pygame.draw.rect(screen, WHITE, [0, y, 479,  1])
-	pygame.draw.rect(screen, WHITE, [x, 0,   1,271])
+	pygame.draw.rect(screen, BLACK, [0, y, 479,  1])
+	pygame.draw.rect(screen, BLACK, [x, 0,   1,271])
 
 def button_show():
 	global exec_stat
@@ -515,12 +517,28 @@ def clear():
 	money_input = 0
 	exec_stat = 0
 
+def cal_key_pad(num):
+	global money_input, money_expect_cost, money_cost, exec_stat
+	global gas_expect_out, gas_out, gas_class, gas_info, mode, uni_unm
+	if exec_stat == 1:
+		if mode == 1:
+			if num < 10 and gas_expect_out<10**6:
+				gas_expect_out = gas_expect_out*10+num
+			if num == 10:
+				gas_expect_out = gas_expect_out//10
+		if mode == 2:
+			if num < 10 and money_expect_cost<10**6:
+				money_expect_cost = money_expect_cost*10+num
+			if num == 10:
+				money_expect_cost = money_expect_cost//10
+
 def butt_event_handler():
-	global exec_stat
+	global money_input, money_expect_cost, money_cost, exec_stat
+	global gas_expect_out, gas_out, gas_class, gas_info, mode, uni_unm
 	while(len(butt_click_event)>0):
 		butt = butt_click_event.popleft()
-		if butt == 10:
-			pass
+		if butt >= 0 and butt <= 10:
+			cal_key_pad(butt)
 		if butt == 11:
 			if exec_stat < 5:
 				exec_stat += 1
@@ -529,6 +547,12 @@ def butt_event_handler():
 				clear()
 			elif exec_stat > 1:
 				exec_stat -= 1
+		if butt == 13:
+			pass
+		if butt == 14:
+			mode = 1
+		if butt == 15:
+			mode = 2
 
 def UI_show():
 	global money_input, money_expect_cost, money_cost, exec_stat
@@ -541,27 +565,32 @@ def UI_show():
 		screen.blit(img, img_rect)
 	if exec_stat == 1:
 		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
-		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(str(exec_stat), False, BLACK)
-		text_rect = text.get_rect(center=(145, 114))
-		screen.blit(text, text_rect)
+		line1 = pygame.font.Font(font_type, 60).render(str(money_expect_cost), False, BLACK)
+		line1_mark = pygame.font.Font(font_type, 30).render(b'\xe5\x85\x83'.decode(), False, BLACK)
+		line2 = pygame.font.Font(font_type, 60).render(str(gas_expect_out), False, BLACK)
+		line2_mark = pygame.font.Font(font_type, 30).render(b'\xe5\x8d\x87'.decode(), False, BLACK)
+		screen.blit(line1, (10,92))
+		screen.blit(line1_mark, (255,120))
+		screen.blit(line2, (10,192))
+		screen.blit(line2_mark, (255,220))
 	if exec_stat == 2:
 		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
-		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(str(exec_stat), False, BLACK)
+		text = pygame.font.Font(font_type, 30).render(str(exec_stat), False, BLACK)
 		text_rect = text.get_rect(center=(145, 114))
 		screen.blit(text, text_rect)
 	if exec_stat == 3:
 		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
-		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(str(exec_stat), False, BLACK)
+		text = pygame.font.Font(font_type, 30).render(str(exec_stat), False, BLACK)
 		text_rect = text.get_rect(center=(145, 114))
 		screen.blit(text, text_rect)
 	if exec_stat == 4:
 		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
-		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(str(exec_stat), False, BLACK)
+		text = pygame.font.Font(font_type, 30).render(str(exec_stat), False, BLACK)
 		text_rect = text.get_rect(center=(145, 114))
 		screen.blit(text, text_rect)
 	if exec_stat == 5:
 		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
-		text = pygame.font.Font('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 30).render(str(exec_stat), False, BLACK)
+		text = pygame.font.Font(font_type, 30).render(str(exec_stat), False, BLACK)
 		text_rect = text.get_rect(center=(145, 114))
 		screen.blit(text, text_rect)
 
@@ -615,8 +644,8 @@ while True:
 	UI_show()
 	button_show()
 	butt_event_handler()
-	#draw_corss(x, y)
+	draw_corss(x, y)
 	pygame.display.update()
 	pygame.display.flip()
-	#stdout.write ("\r" + ('1 ' if x != -1 and y != -1 else '0 ') + "X:{:5d}".format(x) + " Y:{:5d}".format(y))
-	##stdout.flush ()
+	stdout.write ("\r" + ('1 ' if x != -1 and y != -1 else '0 ') + "X:{:5d}".format(x) + " Y:{:5d}".format(y))
+	stdout.flush()
