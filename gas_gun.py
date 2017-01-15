@@ -1,9 +1,8 @@
 from collections import deque
 from pygame.locals import *
 from sys import stdout
-import pygame, sys, os
+import pygame, sys, os, math, time
 import RPi.GPIO as GPIO
-import time
 
 font_type = '/usr/share/fonts/truetype/wqy/wqy-microhei.ttc'
 
@@ -526,15 +525,15 @@ def cal_key_pad(num):
 	global gas_expect_out, gas_out, gas_class, gas_info, mode, uni_unm
 	if exec_stat == 1:
 		if mode == 1:
-			if num < 10 and gas_expect_out<10**6:
-				gas_expect_out = gas_expect_out*10+num
+			if num < 10 and (gas_expect_out//1000)<10**6:
+				gas_expect_out = int(gas_expect_out*10+num*1000)
 			if num == 10:
-				gas_expect_out = gas_expect_out//10
+				gas_expect_out = int(gas_expect_out//10)
 		if mode == 2:
 			if num < 10 and money_expect_cost<10**6:
-				money_expect_cost = money_expect_cost*10+num
+				money_expect_cost = int(money_expect_cost*10+num)
 			if num == 10:
-				money_expect_cost = money_expect_cost//10
+				money_expect_cost = int(money_expect_cost//10)
 	if exec_stat == 2:
 		if num == 2:
 			gas_class = '92'
@@ -542,6 +541,10 @@ def cal_key_pad(num):
 			gas_class = '95'
 		if num == 8:
 			gas_class = '98'
+		if mode == 1:
+			money_expect_cost = int(math.ceil(gas_info[gas_class]*gas_expect_out/1000.0))
+		if mode == 2:
+			gas_expect_out = int(float("{0:.3f}".format(money_expect_cost/gas_info[gas_class]))*1000)
 	if exec_stat == 3:
 		if num < 10 and money_input<10**6:
 			money_input = money_input*10+num
@@ -595,7 +598,7 @@ def UI_show():
 		show_str = ''
 		show_mark = ''
 		if mode == 1:
-			show_str = str(gas_expect_out)
+			show_str = str(gas_expect_out//1000)
 			show_mark = b'\xe5\x8d\x87'.decode()
 		if mode == 2:
 			show_str = str(money_expect_cost)
