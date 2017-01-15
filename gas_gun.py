@@ -550,6 +550,8 @@ def cal_key_pad(num):
 			money_input = money_input*10+num
 		if num == 10:
 			money_input = money_input//10
+	if exec_stat == 4:
+		gas_out += 10**num
 
 def butt_event_handler():
 	global money_input, money_expect_cost, money_cost, exec_stat
@@ -662,14 +664,55 @@ def UI_show():
 
 	if exec_stat == 4:
 		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
-		text = pygame.font.Font(font_type, 30).render(str(exec_stat), False, BLACK)
-		text_rect = text.get_rect(center=(145, 114))
-		screen.blit(text, text_rect)
+		prompt_str_1 = b'\xe8\xab\x8b\xe5\x8f\x96\xe6\xb2\xb9\xe6\xa7\x8d\xe5\x8a\xa0\xe6\xb2\xb9'.decode()
+		prompt_str_2 = b'\xe9\xa0\x90\xe8\xa8\x88\xe6\xb2\xb9\xe9\x87\x8f'.decode()
+		prompt_str_3 = b'\xe5\xb7\xb2\xe5\x8a\xa0\xe6\xb2\xb9\xe9\x87\x8f'.decode()
+		prompt_1 = pygame.font.Font(font_type, 24).render(prompt_str_1, True, BLACK)
+		prompt_2 = pygame.font.Font(font_type, 18).render(prompt_str_2, True, BLACK)
+		prompt_3 = pygame.font.Font(font_type, 24).render(prompt_str_3, True, BLACK)
+		prompt_rect_1 = prompt_1.get_rect(center=(145, 70))
+		show_str_1 = '{:.3f}'.format(gas_expect_out/1000)
+		show_str_2 = '{:.3f}'.format(gas_out/1000)
+		line1 = pygame.font.Font(font_type, 30).render(show_str_1, False, BLACK)
+		line1_mark = pygame.font.Font(font_type, 20).render(b'\xe5\x8d\x87'.decode(), False, BLACK)
+		line2 = pygame.font.Font(font_type, 60).render(show_str_2, False, BLACK)
+		line2_mark = pygame.font.Font(font_type, 30).render(b'\xe5\x8d\x87'.decode(), False, BLACK)
+		screen.blit(prompt_1, prompt_rect_1)
+		screen.blit(prompt_2, (10,100))
+		screen.blit(prompt_3, (10,170))
+		screen.blit(line1, (10,122))
+		screen.blit(line1_mark, (265,130))
+		screen.blit(line2, (10,192))
+		screen.blit(line2_mark, (255,220))
+
 	if exec_stat == 5:
 		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
-		text = pygame.font.Font(font_type, 30).render(str(exec_stat), False, BLACK)
-		text_rect = text.get_rect(center=(145, 114))
-		screen.blit(text, text_rect)
+		money_cost = int(math.ceil(gas_info[gas_class]*gas_out/1000.0))
+		prompt_str_1 = b'\xe4\xba\xa4\xe6\x98\x93\xe7\xb5\x90\xe6\x9e\x9c'.decode()
+		prompt_1 = pygame.font.Font(font_type, 24).render(prompt_str_1, True, BLACK)
+		prompt_rect_1 = prompt_1.get_rect(center=(145, 70))
+		screen.blit(prompt_1, prompt_rect_1)
+		show_str_1 = b'\xe6\x8a\x95\xe5\x85\xa5\xe9\x87\x91\xe9\xa1\x8d\xef\xbc\x9a'.decode() + str(money_input)
+		show_str_2 = b'\xe9\xa0\x90\xe8\xa8\x88\xe9\x87\x91\xe9\xa1\x8d\xef\xbc\x9a'.decode() + str(money_expect_cost)
+		show_str_3 = b'\xe9\xa0\x90\xe8\xa8\x88\xe6\xb2\xb9\xe9\x87\x8f\xef\xbc\x9a'.decode() + str(gas_expect_out)
+		show_str_4 = b'\xe8\x8a\xb1\xe8\xb2\xbb\xe9\x87\x91\xe9\xa1\x8d\xef\xbc\x9a'.decode() + str(money_cost)
+		show_str_5 = b'\xe5\x8a\xa0\xe6\xb2\xb9\xe6\xb2\xb9\xe9\x87\x8f\xef\xbc\x9a'.decode() + str(gas_out)
+		show_str_6 = b'\xe5\x8a\xa0\xe6\xb2\xb9\xe7\xa8\xae\xe9\xa1\x9e\xef\xbc\x9a'.decode() + gas_class
+		show_str_7 = b'\xe7\xb5\x90\xe9\xa4\x98\xef\xbc\x9a'.decode() + str(money_input-money_cost)
+		line1 = pygame.font.Font(font_type, 20).render(show_str_1, False, BLACK)
+		line2 = pygame.font.Font(font_type, 20).render(show_str_2, False, BLACK)
+		line3 = pygame.font.Font(font_type, 20).render(show_str_3, False, BLACK)
+		line4 = pygame.font.Font(font_type, 20).render(show_str_4, False, BLACK)
+		line5 = pygame.font.Font(font_type, 20).render(show_str_5, False, BLACK)
+		line6 = pygame.font.Font(font_type, 20).render(show_str_6, False, BLACK)
+		line7 = pygame.font.Font(font_type, 20).render(show_str_7, False, BLACK)
+		screen.blit(line1, (10,105))
+		screen.blit(line2, (10,125))
+		screen.blit(line3, (10,145))
+		screen.blit(line4, (10,165))
+		screen.blit(line5, (10,185))
+		screen.blit(line6, (10,205))
+		screen.blit(line7, (10,225))
 
 # init
 xpt2046 = XPT2046()
