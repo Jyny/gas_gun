@@ -3,6 +3,7 @@ from pygame.locals import *
 from sys import stdout
 import pygame, sys, os, math, time
 import RPi.GPIO as GPIO
+import printer
 
 font_type = '/usr/share/fonts/truetype/wqy/wqy-microhei.ttc'
 
@@ -565,6 +566,7 @@ def butt_event_handler():
 				exec_stat += 1
 		if butt == 12:
 			if exec_stat >= 5:
+				printer.print_resp(money_input, money_expect_cost, gas_expect_out, money_cost, gas_out, gas_class, money_input-money_cost)
 				clear()
 			elif exec_stat > 1:
 				exec_stat -= 1
