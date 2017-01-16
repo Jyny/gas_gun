@@ -580,7 +580,8 @@ def butt_event_handler():
 					money_cost,
 					'{:.3f}'.format(gas_out/1000),
 					gas_class,
-					money_input-money_cost)
+					money_input-money_cost,
+					uni_unm)
 				clear()
 			elif exec_stat == 1 and (gas_expect_out != 0 or money_expect_cost != 0):
 				exec_stat += 1
@@ -720,9 +721,9 @@ def UI_show():
 		screen.blit(prompt_2, prompt_rect_2)
 		show_str_1 = b'\xe6\x8a\x95\xe5\x85\xa5\xe9\x87\x91\xe9\xa1\x8d\xef\xbc\x9a'.decode() + str(money_input)
 		show_str_2 = b'\xe9\xa0\x90\xe8\xa8\x88\xe9\x87\x91\xe9\xa1\x8d\xef\xbc\x9a'.decode() + str(money_expect_cost)
-		show_str_3 = b'\xe9\xa0\x90\xe8\xa8\x88\xe6\xb2\xb9\xe9\x87\x8f\xef\xbc\x9a'.decode() + str(gas_expect_out)
+		show_str_3 = b'\xe9\xa0\x90\xe8\xa8\x88\xe6\xb2\xb9\xe9\x87\x8f\xef\xbc\x9a'.decode() + '{:.3f}'.format(gas_expect_out/1000)
 		show_str_4 = b'\xe8\x8a\xb1\xe8\xb2\xbb\xe9\x87\x91\xe9\xa1\x8d\xef\xbc\x9a'.decode() + str(money_cost)
-		show_str_5 = b'\xe5\x8a\xa0\xe6\xb2\xb9\xe6\xb2\xb9\xe9\x87\x8f\xef\xbc\x9a'.decode() + str(gas_out)
+		show_str_5 = b'\xe5\x8a\xa0\xe6\xb2\xb9\xe6\xb2\xb9\xe9\x87\x8f\xef\xbc\x9a'.decode() + '{:.3f}'.format(gas_out/1000)
 		show_str_6 = b'\xe5\x8a\xa0\xe6\xb2\xb9\xe7\xa8\xae\xe9\xa1\x9e\xef\xbc\x9a'.decode() + gas_class
 		show_str_7 = b'\xe7\xb5\x90\xe9\xa4\x98\xef\xbc\x9a'.decode() + str(money_input-money_cost)
 		show_str_8 = b'\xe7\xb5\xb1\xe4\xb8\x80\xe7\xb7\xa8\xe8\x99\x9f\xef\xbc\x9a'.decode() + uni_unm
