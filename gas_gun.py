@@ -3,7 +3,7 @@ from pygame.locals import *
 from sys import stdout
 import pygame, sys, os, math, time
 import RPi.GPIO as GPIO
-import printer
+import printer, threading, serial
 
 font_type = '/usr/share/fonts/truetype/wqy/wqy-microhei.ttc'
 
@@ -40,6 +40,13 @@ money_cost = 0
 gas_out = 0
 money_input = 0
 exec_stat = 0
+
+global s, data
+s = serial.Serial()
+s.port = '/dev/ttyACM1'
+s.baudrate = 9600
+s.open()
+data = '0'
 
 class SPIManager(object):
 	
@@ -586,6 +593,8 @@ def butt_event_handler():
 			elif exec_stat == 1 and (gas_expect_out != 0 or money_expect_cost != 0):
 				exec_stat += 1
 			elif exec_stat == 2 and gas_class != '':
+				s.write('A'.encode())
+				s.write(str(money_expect_cost).encode())
 				exec_stat += 1
 			elif exec_stat == 3 and money_input >= money_expect_cost:
 				exec_stat += 1
@@ -665,6 +674,7 @@ def UI_show():
 		screen.blit(line_2, line_rect_2)
 
 	elif exec_stat == 3:
+		money_input = int(data)
 		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
 		prompt_str_1 = b'\xe8\xab\x8b\xe6\x8a\x95\xe5\x85\xa5\xe7\xa1\xac\xe5\xb9\xa3\xe6\x88\x96\xe7\xb4\x99\xe9\x88\x94'.decode()
 		prompt_str_2 = b'\xe6\x87\x89\xe6\x8a\x95\xe5\x85\xa5\xe9\x87\x91\xe9\xa1\x8d'.decode()
@@ -744,7 +754,15 @@ def UI_show():
 		screen.blit(line7, (10,220))
 		screen.blit(line8, (10,240))
 
+def read_s():
+	global data
+	while True:
+		data = s.readline().decode()
+
 # init
+t = threading.Thread(target=read_s)
+t.start()
+
 xpt2046 = XPT2046()
 
 os.environ["SDL_FBDEV"] = "/dev/fb0"
@@ -797,5 +815,5 @@ while True:
 	draw_corss(x, y)
 	pygame.display.update()
 	pygame.display.flip()
-	stdout.write ("\r" + ('1 ' if x != -1 and y != -1 else '0 ') + "X:{:5d}".format(x) + " Y:{:5d}".format(y))
+	stdout.write ("\r" + ('1 ' if x != -1 and y != -1 else '0 ') + "X:{:5d}".format(x) + " Y:{:5d} ".format(y) + data)
 	stdout.flush()
