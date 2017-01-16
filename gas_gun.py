@@ -562,14 +562,21 @@ def butt_event_handler():
 		if butt >= 0 and butt <= 10:
 			cal_key_pad(butt)
 		if butt == 11:
-			if exec_stat < 5:
-				exec_stat += 1
+			if exec_stat > 0:
+				exec_stat -= 1
 		if butt == 12:
 			if exec_stat >= 5:
-				printer.print_resp(money_input, money_expect_cost, gas_expect_out, money_cost, gas_out, gas_class, money_input-money_cost)
+				printer.print_resp(
+					money_input,
+					money_expect_cost,
+					'{:.1f}'.format(gas_expect_out/1000),
+					money_cost,
+					'{:.1f}'.format(gas_out/1000),
+					gas_class,
+					money_input-money_cost)
 				clear()
-			elif exec_stat > 1:
-				exec_stat -= 1
+			elif exec_stat < 5:
+				exec_stat += 1
 		if butt == 13:
 			pass
 		if butt == 14 and exec_stat == 1:
@@ -733,8 +740,8 @@ screen = pygame.display.set_mode([640, 480])
 # init buttons 
 buttons = []
 buttons.append(button(0, 356,415,212,271, PERPLE, '0'))
-start_button = button(11, 294,353,212,271, GREEN, 'START')
-end_button = button(12, 418,477,212,271, RED, 'END')
+start_button = button(11, 294,353,212,271, RED, b'\xe4\xb8\x8a\xe4\xb8\x80\xe6\xad\xa5'.decode())
+end_button = button(12, 418,477,212,271, GREEN, b'\xe4\xb8\x8b\xe4\xb8\x80\xe6\xad\xa5'.decode())
 start_button.size = 18
 end_button.size = 18
 buttons.append(start_button)
