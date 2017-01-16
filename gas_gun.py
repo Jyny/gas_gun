@@ -528,30 +528,30 @@ def cal_key_pad(num):
 		if mode == 1:
 			if num < 10 and (gas_expect_out//1000)<10**6:
 				gas_expect_out = int(gas_expect_out*10+num*1000)
-			if num == 10:
+			elif num == 10:
 				gas_expect_out = int(gas_expect_out//10)
-		if mode == 2:
+		elif mode == 2:
 			if num < 10 and money_expect_cost<10**6:
 				money_expect_cost = int(money_expect_cost*10+num)
-			if num == 10:
+			elif num == 10:
 				money_expect_cost = int(money_expect_cost//10)
-	if exec_stat == 2:
+	elif exec_stat == 2:
 		if num == 2:
 			gas_class = '92'
 		elif num == 5:
 			gas_class = '95'
 		elif num == 8:
 			gas_class = '98'
-	if exec_stat == 3:
-		if mode == 1:
+		if gas_class != '' and mode == 1:
 			money_expect_cost = int(math.ceil(gas_info[gas_class]*gas_expect_out/1000.0))
-		if mode == 2:
+		elif gas_class != '' and mode == 2:
 			gas_expect_out = int(float("{0:.3f}".format(money_expect_cost/gas_info[gas_class]))*1000)
+	elif exec_stat == 3:
 		if num < 10 and money_input<10**6:
 			money_input = money_input*10+num
-		if num == 10:
+		elif num == 10:
 			money_input = money_input//10
-	if exec_stat == 4:
+	elif exec_stat == 4:
 		gas_out += 10**num
 
 def butt_event_handler():
@@ -619,7 +619,7 @@ def UI_show():
 		if mode == 1:
 			show_str = str(gas_expect_out//1000)
 			show_mark = b'\xe5\x8d\x87'.decode()
-		if mode == 2:
+		elif mode == 2:
 			show_str = str(money_expect_cost)
 			show_mark = b'\xe5\x85\x83'.decode()
 		prompt_1 = pygame.font.Font(font_type, 24).render(prompt_str_1, True, BLACK)
