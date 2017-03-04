@@ -513,6 +513,19 @@ def butt_click_handler(butt_id):
 		butt_press_event.remove(butt_id)
 		butt_click_event.append(butt_id)
 
+def write_log():
+	global money_input, money_expect_cost, money_cost, exec_stat
+	global gas_expect_out, gas_out, gas_class, gas_info, mode, uni_unm
+	with open('/tmp/gas_log', 'a') as logfile:
+		logfile.writelines(
+			'money_input:' + money_input + ' ' +
+			'money_expect_cost:' + money_expect_cost + ' ' +
+			'money_cost:' + money_cost + ' ' +
+			'gas_expect_out:' + gas_expect_out + ' ' +
+			'gas_out:' + gas_out + ' ' +
+			'gas_class:' + gas_class
+		)
+
 def clear():
 	global money_input, money_expect_cost, money_cost, exec_stat
 	global gas_expect_out, gas_out, gas_class, gas_info, mode, uni_unm
