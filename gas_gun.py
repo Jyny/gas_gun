@@ -617,7 +617,7 @@ def butt_event_handler():
 				s1.write('B'.encode())
 				s1.write(str(tmp).encode())
 				exec_stat += 1
-			elif exec_stat == 4:
+			elif exec_stat == 4 and gas_out >= gas_expect_out:
 				exec_stat += 1
 		elif butt == 13 and exec_stat == 5:
 			setting_butts[0].set_stat(1)
