@@ -1,14 +1,14 @@
 from collections import deque
 from pygame.locals import *
 from sys import stdout
-import pygame, sys, os, math, time
+import pygame, sys, os, math, time, string
 import RPi.GPIO as GPIO
 import printer, threading, serial
 import serial.tools.list_ports
 
 font_type = '/usr/share/fonts/truetype/wqy/wqy-microhei.ttc'
 printer_hwid = '22A0:028A'
-io_hwid = '2341:0042'
+io_hwid = '1A86:7523'
 global s1, s2, data
 
 BLACK = (  0,   0,   0)
@@ -524,8 +524,10 @@ def write_log():
 		)
 
 def clear():
+	global data
 	global money_input, money_expect_cost, money_cost, exec_stat
 	global gas_expect_out, gas_out, gas_class, gas_info, mode, uni_unm
+	data = ''
 	gas_class = ''
 	money_expect_cost = 0
 	gas_expect_out = 0
@@ -577,7 +579,7 @@ def cal_key_pad(num):
 			uni_unm = uni_unm[:-1]
 
 def butt_event_handler():
-	global s1, s2
+	global s1, s2, data
 	global money_input, money_expect_cost, money_cost, exec_stat
 	global gas_expect_out, gas_out, gas_class, gas_info, mode, uni_unm
 	while(len(butt_click_event)>0):
@@ -605,10 +607,15 @@ def butt_event_handler():
 			elif exec_stat == 1 and (gas_expect_out != 0 or money_expect_cost != 0):
 				exec_stat += 1
 			elif exec_stat == 2 and gas_class != '':
+				data = '00'
 				s1.write('A'.encode())
 				s1.write(str(money_expect_cost).encode())
 				exec_stat += 1
 			elif exec_stat == 3 and money_input >= money_expect_cost:
+				tmp = gas_expect_out/1000.0
+				data = '0.0'
+				s1.write('B'.encode())
+				s1.write(str(tmp).encode())
 				exec_stat += 1
 			elif exec_stat == 4:
 				exec_stat += 1
@@ -708,6 +715,7 @@ def UI_show():
 		screen.blit(line2_mark, (255,220))
 
 	elif exec_stat == 4:
+		gas_out = float(data)*1000
 		pygame.draw.rect(screen, WHITE, [  0, 42,291,229])
 		prompt_str_1 = b'\xe8\xab\x8b\xe5\x8f\x96\xe6\xb2\xb9\xe6\xa7\x8d\xe5\x8a\xa0\xe6\xb2\xb9'.decode()
 		prompt_str_2 = b'\xe9\xa0\x90\xe8\xa8\x88\xe6\xb2\xb9\xe9\x87\x8f'.decode()
@@ -769,7 +777,7 @@ def UI_show():
 def read_s():
 	global data, s1
 	while True:
-		data = s1.readline().decode()
+		data = ''.join([x for x in s1.readline().decode('ascii', errors='ignore') if x in string.printable])
 
 # init
 #s1 is arduino IO
@@ -787,6 +795,7 @@ for dev in devs:
 		s1.port = dev.device
 
 s1.open()
+s2.open()
 data = '0'
 
 t = threading.Thread(target=read_s)

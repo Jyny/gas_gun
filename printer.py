@@ -12,7 +12,6 @@ def print_resp(s, insert, estimate_money, estimate_oil, cost, oil_add, type, res
 	s.timeout = 1
 	'''
 
-	s.open()
 	s.write(serial.to_bytes([0x1D, 0x21, 0x11]))
 
 	s.write(b'\xa7\xeb\xa4J\xa1G')
