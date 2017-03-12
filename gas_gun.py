@@ -4,8 +4,12 @@ from sys import stdout
 import pygame, sys, os, math, time
 import RPi.GPIO as GPIO
 import printer, threading, serial
+import serial.tools.list_ports
 
 font_type = '/usr/share/fonts/truetype/wqy/wqy-microhei.ttc'
+printer_hwid = '22A0:028A'
+io_hwid = '2341:0042'
+global s1, s2, data
 
 BLACK = (  0,   0,   0)
 WHITE = (255, 255, 255)
@@ -40,19 +44,6 @@ money_cost = 0
 gas_out = 0
 money_input = 0
 exec_stat = 0
-
-global s1, s2, data
-
-s1 = serial.Serial()
-s1.port = '/dev/ttyACM1'
-s1.baudrate = 9600
-
-s2 = serial.Serial()
-s2.port = '/dev/ttyACM0'
-s2.baudrate = 9600
-
-s1.open()
-data = '0'
 
 class SPIManager(object):
 	
@@ -781,6 +772,23 @@ def read_s():
 		data = s1.readline().decode()
 
 # init
+#s1 is arduino IO
+#s2 is printer
+s1 = serial.Serial()
+s1.baudrate = 9600
+s2 = serial.Serial()
+s2.baudrate = 9600
+
+devs = serial.tools.list_ports.comports()
+for dev in devs:
+	if(printer_hwid in dev.hwid):
+		s2.port = dev.device
+	if(io_hwid in dev.hwid):
+		s1.port = dev.device
+
+s1.open()
+data = '0'
+
 t = threading.Thread(target=read_s)
 t.start()
 
