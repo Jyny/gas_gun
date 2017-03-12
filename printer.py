@@ -1,7 +1,8 @@
 import serial
 import time
 
-def print_resp(insert,estimate_money,estimate_oil,cost,oil_add,type,rest, num):
+def print_resp(s, insert, estimate_money, estimate_oil, cost, oil_add, type, rest, num):
+	'''
 	s = serial.Serial()
 	s.port = "/dev/ttyACM0"
 	s.baudrate = 9600
@@ -9,6 +10,7 @@ def print_resp(insert,estimate_money,estimate_oil,cost,oil_add,type,rest, num):
 	s.parity = serial.PARITY_NONE
 	s.stopbits = serial.STOPBITS_ONE
 	s.timeout = 1
+	'''
 
 	s.open()
 	s.write(serial.to_bytes([0x1D, 0x21, 0x11]))

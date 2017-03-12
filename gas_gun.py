@@ -41,11 +41,17 @@ gas_out = 0
 money_input = 0
 exec_stat = 0
 
-global s, data
-s = serial.Serial()
-s.port = '/dev/ttyACM1'
-s.baudrate = 9600
-s.open()
+global s1, s2, data
+
+s1 = serial.Serial()
+s1.port = '/dev/ttyACM1'
+s1.baudrate = 9600
+
+s2 = serial.Serial()
+s2.port = '/dev/ttyACM0'
+s2.baudrate = 9600
+
+s1.open()
 data = '0'
 
 class SPIManager(object):
@@ -580,6 +586,7 @@ def cal_key_pad(num):
 			uni_unm = uni_unm[:-1]
 
 def butt_event_handler():
+	global s1, s2
 	global money_input, money_expect_cost, money_cost, exec_stat
 	global gas_expect_out, gas_out, gas_class, gas_info, mode, uni_unm
 	while(len(butt_click_event)>0):
@@ -594,6 +601,7 @@ def butt_event_handler():
 		elif butt == 12:
 			if exec_stat >= 5:
 				printer.print_resp(
+					s2,
 					money_input,
 					money_expect_cost,
 					'{:.3f}'.format(gas_expect_out/1000),
@@ -606,8 +614,8 @@ def butt_event_handler():
 			elif exec_stat == 1 and (gas_expect_out != 0 or money_expect_cost != 0):
 				exec_stat += 1
 			elif exec_stat == 2 and gas_class != '':
-				s.write('A'.encode())
-				s.write(str(money_expect_cost).encode())
+				s1.write('A'.encode())
+				s1.write(str(money_expect_cost).encode())
 				exec_stat += 1
 			elif exec_stat == 3 and money_input >= money_expect_cost:
 				exec_stat += 1
@@ -768,9 +776,9 @@ def UI_show():
 		screen.blit(line8, (10,240))
 
 def read_s():
-	global data
+	global data, s1
 	while True:
-		data = s.readline().decode()
+		data = s1.readline().decode()
 
 # init
 t = threading.Thread(target=read_s)
