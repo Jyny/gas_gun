@@ -1,10 +1,9 @@
 from collections import deque
 from pygame.locals import *
 from sys import stdout
-import pygame, sys, os, math, time, string
 import RPi.GPIO as GPIO
-import printer, threading, serial
-import serial.tools.list_ports
+import pygame, sys, os, math, time, string, flask, csv, datetime
+import printer, threading, serial, serial.tools.list_ports
 
 font_type = '/usr/share/fonts/truetype/wqy/wqy-microhei.ttc'
 printer_hwid = '22A0:028A'
@@ -842,6 +841,45 @@ setting_butts.append(setting_button(15, 145,291, 0, 39, b'\xe8\xa8\xad\xe5\xae\x
 # event queue
 butt_press_event = deque()
 butt_click_event = deque()
+
+# HTTP SERVER
+app = flask.Flask(__name__)
+
+@app.route("/", methods=['GET'])
+def index():
+	return "YO"
+
+@app.route("/getPrice", methods=['GET'])
+def getPrice():
+	dateddtime.datetime(YYYY, MM, DD, hh, mm, ss)
+	return "OK"
+
+@app.route("/TX", methods=['POST'])
+def tx():
+	request.form['yourname']
+	return "OK"
+
+@app.route("/setPrice", methods=['GET', 'POST'])
+def setPrcie():
+	if request.method == 'GET':
+		return 'YO'
+	if request.method == 'POST':
+		with open('price.csv', 'a') as csvfile:
+			writer = csv.writer(csvfile, delimiter=',')
+			writer.writerow([, 'Lovely S,pam', 'Wonderful Spam'])
+				request.form['yyyy']
+				request.form['MM']
+				request.form['DD']
+				request.form['hh']
+				request.form['mm']
+				request.form['ss']
+				request.form['92']
+				request.form['95']
+				request.form['98']
+		return "OK"
+
+server = threading.Thread(target=app.run, kwargs={'host':'192.168.1.140', 'port':80})
+server.start()
 
 #main
 while True:
