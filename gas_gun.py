@@ -593,6 +593,16 @@ def butt_event_handler():
 				clear()
 		elif butt == 12:
 			if exec_stat >= 5:
+				tx_info = (
+					money_input,
+					money_expect_cost,
+					'{:.3f}'.format(gas_expect_out/1000),
+					money_cost,
+					'{:.3f}'.format(gas_out/1000),
+					gas_class,
+					money_input-money_cost,
+					uni_unm
+				)
 				printer.print_resp(
 					s2,
 					money_input,
@@ -602,7 +612,11 @@ def butt_event_handler():
 					'{:.3f}'.format(gas_out/1000),
 					gas_class,
 					money_input-money_cost,
-					uni_unm)
+					uni_unm
+				)
+				with open('transaction.csv', 'a') as csvfile:
+					writer = csv.writer(csvfile, delimiter=',')
+					writer.writerow(tx_info)
 				clear()
 			elif exec_stat == 1 and (gas_expect_out != 0 or money_expect_cost != 0):
 				exec_stat += 1
@@ -857,13 +871,31 @@ def getPrice():
 
 @app.route("/TX", methods=['POST'])
 def tx():
-	request.form['yourname']
-	return "OK"
+	if request.method == 'POST':
+		with open('price.csv', 'a') as csvfile:
+			writer = csv.writer(csvfile, delimiter=',')
+			writer.writerow([
+			])
+		return "OK"
+	else:
+		with open('price.csv', 'a') as csvfile:
+			writer = csv.writer(csvfile, delimiter=',')
+			writer.writerow([
+				money_input,
+				money_expect_cost,
+				'{:.3f}'.format(gas_expect_out/1000),
+				money_cost,
+				'{:.3f}'.format(gas_out/1000),
+				gas_class,
+				money_input-money_cost,
+				uni_unm
+			])
+		return "OK"
 
 @app.route("/setPrice", methods=['GET', 'POST'])
 def setPrcie():
 	if request.method == 'GET':
-		return 'YO'
+		return render_template('setPrice.html')
 	if request.method == 'POST':
 		with open('price.csv', 'a') as csvfile:
 			writer = csv.writer(csvfile, delimiter=',')
