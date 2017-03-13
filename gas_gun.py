@@ -1,8 +1,9 @@
 from collections import deque
 from pygame.locals import *
 from sys import stdout
+from flask import *
 import RPi.GPIO as GPIO
-import pygame, sys, os, math, time, string, flask, csv, datetime
+import pygame, sys, os, math, time, string, csv, datetime
 import printer, threading, serial, serial.tools.list_ports
 
 font_type = '/usr/share/fonts/truetype/wqy/wqy-microhei.ttc'
@@ -843,7 +844,7 @@ butt_press_event = deque()
 butt_click_event = deque()
 
 # HTTP SERVER
-app = flask.Flask(__name__)
+app = Flask(__name__)
 
 @app.route("/", methods=['GET'])
 def index():
@@ -866,16 +867,17 @@ def setPrcie():
 	if request.method == 'POST':
 		with open('price.csv', 'a') as csvfile:
 			writer = csv.writer(csvfile, delimiter=',')
-			writer.writerow([, 'Lovely S,pam', 'Wonderful Spam'])
-				request.form['yyyy']
-				request.form['MM']
-				request.form['DD']
-				request.form['hh']
-				request.form['mm']
-				request.form['ss']
-				request.form['92']
-				request.form['95']
+			writer.writerow([
+				request.form['yyyy'],
+				request.form['MM'],
+				request.form['DD'],
+				request.form['hh'],
+				request.form['mm'],
+				request.form['ss'],
+				request.form['92'],
+				request.form['95'],
 				request.form['98']
+			])
 		return "OK"
 
 server = threading.Thread(target=app.run, kwargs={'host':'192.168.1.140', 'port':80})
