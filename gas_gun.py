@@ -862,12 +862,12 @@ app = Flask(__name__)
 
 @app.route("/", methods=['GET'])
 def index():
-	return "YO"
-
-@app.route("/getPrice", methods=['GET'])
-def getPrice():
-	dateddtime.datetime(YYYY, MM, DD, hh, mm, ss)
-	return "OK"
+	tmp = []
+	with open('transaction.csv', 'r') as csvfile:
+		reader = csv.reader(csvfile, delimiter=',')
+		for each in reader:
+			tmp.append(each)
+	return render_template('txlog.html', txlogs=tmp)
 
 @app.route("/TX", methods=['POST'])
 def tx():
@@ -875,20 +875,6 @@ def tx():
 		with open('price.csv', 'a') as csvfile:
 			writer = csv.writer(csvfile, delimiter=',')
 			writer.writerow([
-			])
-		return "OK"
-	else:
-		with open('price.csv', 'a') as csvfile:
-			writer = csv.writer(csvfile, delimiter=',')
-			writer.writerow([
-				money_input,
-				money_expect_cost,
-				'{:.3f}'.format(gas_expect_out/1000),
-				money_cost,
-				'{:.3f}'.format(gas_out/1000),
-				gas_class,
-				money_input-money_cost,
-				uni_unm
 			])
 		return "OK"
 
