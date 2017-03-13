@@ -537,8 +537,27 @@ def clear():
 	exec_stat = 0
 	mode = 0
 	uni_unm = ''
+	gas_price()
 	for butt in setting_butts:
 		butt.set_stat(0)
+
+def gas_price():
+	global gas_info
+	tmp = []
+	with open('price.csv', 'r') as csvfile:
+		reader = csv.reader(csvfile, delimiter=',')
+		for each in reader:
+			tmp.append([datetime.datetime(int(each[0]), int(each[1]), int(each[2]), int(each[3]), int(each[4]), int(each[5])), each[6], each[7], each[8]])
+	tmp.sort()
+	gas_info = {
+		'92':float(tmp[len(tmp)-1][1]),
+		'95':float(tmp[len(tmp)-1][2]),
+		'98':float(tmp[len(tmp)-1][3])
+	}
+	for i in range(len(tmp)):
+		if datetime.datetime.now() < tmp[i][0]:
+			gas_info = {'92':float(tmp[i-1][1]), '95':float(tmp[i-1][2]), '98':float(tmp[i-1][3])}
+			break
 
 def cal_key_pad(num):
 	global money_input, money_expect_cost, money_cost, exec_stat
