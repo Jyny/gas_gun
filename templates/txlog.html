@@ -3,7 +3,7 @@
 </head>
 <body>
 	{% for each in txlogs %}
-		<p>{{each[0]}} {{each[1]}} {{each[2]}} {{each[3]}} {{each[4]}} {{each[5]}} {{each[6]}} {{each[7]}}<p>	
+		<p>money_input:{{each[0]}} money_expect_cost:{{each[1]}} gas_expect_out:{{each[2]}} money_cost:{{each[3]}} gas_out:{{each[4]}} gas_class"{{each[5]}} Total:{{each[6]}} uni_unm:{{each[7]}}<p>
 	{% endfor %}
 </body>
 </html>

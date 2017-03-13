@@ -897,6 +897,10 @@ def tx():
 			])
 		return "OK"
 
+@app.route('/getPrice', methods=['GET'])
+def getPrice():
+	return '92:'+str(gas_info['92'])+' 95:'+str(gas_info['95'])+' 98:'+str(gas_info['98'])
+
 @app.route("/setPrice", methods=['GET', 'POST'])
 def setPrcie():
 	if request.method == 'GET':
