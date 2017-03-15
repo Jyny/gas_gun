@@ -881,14 +881,13 @@ app = Flask(__name__)
 
 @app.route("/", methods=['GET'])
 def index():
-	tmp = []
-	with open('transaction.csv', 'r') as csvfile:
-		reader = csv.reader(csvfile, delimiter=',')
-		for each in reader:
-			tmp.append(each)
-	return render_template('txlog.html', txlogs=tmp)
+	return render_template('index.html')
 
-@app.route("/TX", methods=['POST'])
+@app.route('/transaction_log', methods=['GET'])
+def download():
+	return send_from_directory(directory='./', filename='transaction.csv')
+
+@app.route("/TX", methods=['GET', 'POST'])
 def tx():
 	if request.method == 'POST':
 		with open('price.csv', 'a') as csvfile:
@@ -896,6 +895,13 @@ def tx():
 			writer.writerow([
 			])
 		return "OK"
+	if request.method == 'GET':
+		tmp = []
+		with open('transaction.csv', 'r') as csvfile:
+			reader = csv.reader(csvfile, delimiter=',')
+			for each in reader:
+				tmp.append(each)
+		return render_template('txlog.html', txlogs=tmp)
 
 @app.route('/getPrice', methods=['GET'])
 def getPrice():
