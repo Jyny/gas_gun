@@ -1,9 +1,41 @@
 <html>
 <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<style>
+		table {
+			font-family: arial, sans-serif;
+			border-collapse: collapse;
+			width: 100%;
+		}
+
+		td, th {
+			border: 1px solid #dddddd;
+			text-align: left;
+			padding: 8px;
+		}
+
+		tr:nth-child(even) {
+			background-color: #dddddd;
+		}
+	</style>
 </head>
 <body>
-	{% for each in txlogs %}
-		<p>money_input:{{each[0]}} money_expect_cost:{{each[1]}} gas_expect_out:{{each[2]}} money_cost:{{each[3]}} gas_out:{{each[4]}} gas_class"{{each[5]}} Total:{{each[6]}} uni_unm:{{each[7]}}<p>
-	{% endfor %}
+    <table>
+    <tr>
+        <th>投入金額</th>
+        <th>預計金額</th>
+        <th>預計加油</th>
+        <th>金額</th>
+        <th>加油</th>
+        <th>油種</th>
+        <th>結餘</th>
+        <th>統一編號</th>
+    </tr>
+    {% for each in txlogs %}
+        <tr>
+        <td>{{each[0]}}</td><td>{{each[1]}}</td><td>{{each[2]}}</td><td>{{each[3]}}</td><td>{{each[4]}}</td><td>{{each[5]}}</td><td>{{each[6]}}</td><td>{{each[7]}}</td>
+        </tr>
+    {% endfor %}
+    </table>
 </body>
 </html>
