@@ -5,4 +5,4 @@ Acceptable payment methods are cash, coins and banknotes only.
 
 ## description
 
-the code run in raspberry pi put in branch `RaspberryPi`
+the code run in raspberry pi put in branch `RaspberryPi` for more info about RaspberryPi see [https://github.com/Jyny/gas_gun/blob/RaspberryPI/README.md](https://github.com/Jyny/gas_gun/blob/RaspberryPI/README.md)
