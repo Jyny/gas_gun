@@ -9,6 +9,7 @@ import printer, threading, serial, serial.tools.list_ports
 font_type = '/usr/share/fonts/truetype/wqy/wqy-microhei.ttc'
 printer_hwid = '22A0:028A'
 io_hwid = '1A86:7523'
+# s1:arduino s2:printer data:string from serail
 global s1, s2, data
 
 BLACK = (  0,   0,   0)
@@ -20,18 +21,29 @@ GBLUE  = (  0, 255, 255)
 YELLOW = (255, 255,   0)
 PERPLE  = (255,   0, 255)
 
-# screen settings
+# calibration touch point settings
 global x_min, x_max, y_min, y_max
 x_min = 218
 y_min = 454
 x_max = 3894
 y_max = 3795
 
+# touch position
 global x, y
 x = -1
 y = -1
 
-# exec_stat variables
+# core variables
+# money_input:投入金額
+# money_expect_cost:預計花費
+# money_cost:實際花費
+# exec_stat:執行步驟(狀態) (0~5) (初始, 模式, 油種, 數量, 投錢, 加油, 結束)
+# gas_expect_out:預計輸油
+# gas_out:實際輸油
+# gas_class:油種
+# gas_info:油價資訊
+# mode:加油模式 (1,2) (油量:金額)
+# uni_unm:統一編號
 global money_input, money_expect_cost, money_cost, exec_stat
 global gas_expect_out, gas_out, gas_class, gas_info, mode, uni_unm
 uni_unm = ''
@@ -45,6 +57,7 @@ gas_out = 0
 money_input = 0
 exec_stat = 0
 
+# SPI driver for touchpad
 class SPIManager(object):
 	
 	SPI_MOSI = 10
@@ -144,6 +157,7 @@ class SPIManager(object):
 
 		return buffer;
 
+# touchpad driver
 class XPT2046(object):
 	
 	StartBit = 0b10000000 
@@ -243,6 +257,7 @@ class XPT2046(object):
 		result = ( x / xDivisor) * (( z2 / z1) - 1);
 		return result;# Copyright 2012 Matthew Lowden
 
+# stat_lass button
 class button:
 	def __init__(self, butt_id, x1, x2, y1, y2, color, text):
 		self.id = butt_id
@@ -282,7 +297,8 @@ class button:
 		text = pygame.font.Font(font_type, self.size).render(self.text, False, BLACK)
 		text_rect = text.get_rect(center=((self.x1+self.x2)/2, (self.y1+self.y2)/2))
 		screen.blit(text, text_rect)
-		
+
+# stat_full button
 class setting_button:
 	def __init__(self, butt_id, x1, x2, y1, y2, text):
 		self.id = butt_id
@@ -334,6 +350,7 @@ class setting_button:
 		else:
 			self.stat = 0
 
+# screen color test
 def screen_test(sec):
 	screen.fill(WHITE)
 	pygame.display.update()
@@ -363,6 +380,7 @@ def screen_test(sec):
 	pygame.display.update()
 	time.sleep(sec)
 
+# touchpad test_point draw
 def test_point():
 	screen.fill(WHITE)
 	pygame.draw.rect(screen, BLACK, [  8,  8, 6, 6])
@@ -386,6 +404,7 @@ def test_point():
 	pygame.draw.rect(screen, RED, [478,270, 2, 2])
 	pygame.draw.rect(screen, RED, [239,135, 2, 2])
 
+# raw touch point x y (not fit resolution
 def raw_touch():
 	i = 0
 	j = 0
@@ -402,6 +421,7 @@ def raw_touch():
 			j += 1
 	return (-1, -1) if i<3 else (int(x/i), int(y/i))
 
+# touch point x y (fit to resolution)
 def read_touch():
 	global x_min, x_max, y_min, y_max
 	x_rate = 459/(x_max-x_min)
@@ -414,6 +434,7 @@ def read_touch():
 	else:
 		return -1, -1
 
+# calibration touch to set x_min x_max y_min y_max
 def calibration_touch():
 	global x_min, x_max, y_min, y_max
 	i = 0
@@ -470,10 +491,12 @@ def calibration_touch():
 			break
 	print(x_min, y_min, x_max, y_max)
 
+# draw the corss on screen to show that touch point fit screen
 def draw_corss(x, y):
 	pygame.draw.rect(screen, BLACK, [0, y, 479,  1])
 	pygame.draw.rect(screen, BLACK, [x, 0,   1,271])
 
+# show all buttons in button pool (buttons & setting_butts)
 def button_show():
 	global exec_stat
 	global x, y
@@ -488,23 +511,31 @@ def button_show():
 	for butt in buttons:
 		if butt.is_click(x, y):
 			butt.blink(screen)
+			# add button to butt_press_event pool when press
 			butt_press_handler(butt.id)
 		else:
 			butt.draw(screen)
+			# check the button is pressed and released
 			butt_click_handler(butt.id)
 
 	for butt in setting_butts:
 		if butt.is_click(x, y):
 			butt.blink(screen)
+			# add button to butt_press_event pool when press
 			butt_press_handler(butt.id)
 		else:
 			butt.draw(screen)
+			# check the button is pressed and released
 			butt_click_handler(butt.id)
 
+# add button to butt_press_event pool
 def butt_press_handler(butt_id):
 	if(butt_id not in butt_press_event):
 		butt_press_event.append(butt_id)
 
+# remove button from butt_press_event pool
+# and add to butt_click_event pool
+# check the button is pressed and released
 def butt_click_handler(butt_id):
 	if(butt_id in butt_press_event):
 		butt_press_event.remove(butt_id)
@@ -523,6 +554,7 @@ def write_log():
 			'gas_class:' + gas_class
 		)
 
+# clean all data when operation terminated
 def clear():
 	global data
 	global money_input, money_expect_cost, money_cost, exec_stat
@@ -541,6 +573,7 @@ def clear():
 	for butt in setting_butts:
 		butt.set_stat(0)
 
+# read gas price from file & compare with timedate
 def gas_price():
 	global gas_info
 	tmp = []
@@ -559,6 +592,7 @@ def gas_price():
 			gas_info = {'92':float(tmp[i-1][1]), '95':float(tmp[i-1][2]), '98':float(tmp[i-1][3])}
 			break
 
+# buttoms' function controller
 def cal_key_pad(num):
 	global money_input, money_expect_cost, money_cost, exec_stat
 	global gas_expect_out, gas_out, gas_class, gas_info, mode, uni_unm
@@ -597,6 +631,7 @@ def cal_key_pad(num):
 		elif num == 10:
 			uni_unm = uni_unm[:-1]
 
+# handle the event when buttom pressed and released
 def butt_event_handler():
 	global s1, s2, data
 	global money_input, money_expect_cost, money_cost, exec_stat
@@ -667,6 +702,7 @@ def butt_event_handler():
 			setting_butts[1].set_stat(0)
 			setting_butts[2].set_stat(1)
 
+# show the UI with different exec_stat
 def UI_show():
 	global money_input, money_expect_cost, money_cost, exec_stat
 	global gas_expect_out, gas_out, gas_class, gas_info, mode, uni_unm
@@ -807,6 +843,7 @@ def UI_show():
 		screen.blit(line7, (10,220))
 		screen.blit(line8, (10,240))
 
+# read data from serail
 def read_s():
 	global data, s1
 	while True:
@@ -820,6 +857,8 @@ s1.baudrate = 9600
 s2 = serial.Serial()
 s2.baudrate = 9600
 
+# set specific serail prot
+# with detect different serail prot's  hardware ID
 devs = serial.tools.list_ports.comports()
 for dev in devs:
 	if(printer_hwid in dev.hwid):
@@ -827,15 +866,19 @@ for dev in devs:
 	if(io_hwid in dev.hwid):
 		s1.port = dev.device
 
+# enable serail port
 s1.open()
 s2.open()
 data = '0'
 
+# read serial string in background
 t = threading.Thread(target=read_s)
 t.start()
 
+# init touchpad driver
 xpt2046 = XPT2046()
 
+# init screen
 os.environ["SDL_FBDEV"] = "/dev/fb0"
 pygame.init()
 pygame.mouse.set_visible(False)
@@ -873,7 +916,9 @@ setting_butts.append(setting_button(14,   2,144, 0, 39, b'\xe8\xa8\xad\xe5\xae\x
 setting_butts.append(setting_button(15, 145,291, 0, 39, b'\xe8\xa8\xad\xe5\xae\x9a\xe9\x87\x91\xe9\xa1\x8d'.decode()))
 
 # event queue
+# when button is pressing
 butt_press_event = deque()
+# when button pressed and released
 butt_click_event = deque()
 
 # HTTP SERVER
@@ -927,18 +972,27 @@ def setPrcie():
 			])
 		return "OK"
 
+# run HTTP server in background
 server = threading.Thread(target=app.run, kwargs={'host':'192.168.1.140', 'port':80})
 server.start()
 
 #main
 while True:
+	# read the touch point x y
 	x, y = read_touch()
+	# fill the screen in black color
 	screen.fill(BLACK)
+	# show UI
 	UI_show()
+	# show buttons
 	button_show()
+	# handle the event after button pressed and released
 	butt_event_handler()
+	# draw the cross on screen
 	draw_corss(x, y)
+	# flush double frame to display
 	pygame.display.update()
 	pygame.display.flip()
+	# debug log
 	stdout.write ("\r" + ('1 ' if x != -1 and y != -1 else '0 ') + "X:{:5d}".format(x) + " Y:{:5d} ".format(y) + data)
 	stdout.flush()
