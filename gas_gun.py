@@ -890,6 +890,9 @@ screen = pygame.display.set_mode([640, 480])
 #screen_test(0.1)
 #calibration_touch()
 
+# init gas price
+gas_price()
+
 # init buttons 
 buttons = []
 buttons.append(button(0, 356,415,212,271, PERPLE, '0'))
